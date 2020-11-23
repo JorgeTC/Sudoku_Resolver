@@ -21,6 +21,11 @@ struct SSetting {
    bool bComentar = true;
 #endif
    bool bValidSpecial = false;
+#if !_DEBUG
+   bool bRandSuposition = true;
+#else
+   bool bRandSuposition = false;
+#endif
 };
 
 class Sudoku {
@@ -48,10 +53,13 @@ public:
    // Interfaz adjustes especiales
    inline bool    GetSSComent()     { return SpecialSettings.bComentar; };
    inline bool    GetSSValid()      { return SpecialSettings.bValidSpecial; };
-   inline void    SetSSComent(bool bValue)     { SpecialSettings.bComentar = bValue; };
-   inline void    SetSSValid(bool bValue)      { SpecialSettings.bValidSpecial = bValue; };
+   inline bool    GetSSRand()       { return SpecialSettings.bRandSuposition; };
+   inline void    SetSSComent(bool bValue)   { SpecialSettings.bComentar = bValue; };
+   inline void    SetSSValid(bool bValue)    { SpecialSettings.bValidSpecial = bValue; };
+   inline void    SetSSRand(bool bValue)     { SpecialSettings.bRandSuposition = bValue; };
    inline void    ChangeSSComent()  { SpecialSettings.bComentar = !SpecialSettings.bComentar; };
    inline void    ChangeSSValid()   { SpecialSettings.bValidSpecial = !SpecialSettings.bValidSpecial; };
+   inline void    ChangeSSRand()    { SpecialSettings.bRandSuposition = !SpecialSettings.bRandSuposition; };
 
    // Rellenar el tablero
    void copiar(int tablero[9][9]);
@@ -60,7 +68,7 @@ public:
    // Validez de contenido en una casilla
    bool comprobar(int const fila, int const columna, int const n);
    bool comprobar(casilla const& place, int const n);
-   bool comprobarEspecial(int const fila, int const columna, int const n);
+   bool comprobarEspecial();
    int  posibleNumeroEn(int const fila, int const columna, int& candidato);
    int  posiblenumeroEn(casilla const& place, int& candidato);
 

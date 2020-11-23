@@ -68,7 +68,7 @@ bool
 Sudoku::GetSolution()
 {
    if (!resolver()) {
-      std::cout << "No se ha podido terminar el Sudoku.";
+      std::cout << IMPOSSIBLE_SUDOKU;
       return false;
    }
    else {

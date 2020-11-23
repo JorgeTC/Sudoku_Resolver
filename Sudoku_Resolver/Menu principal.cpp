@@ -61,6 +61,8 @@ Menu::printSS()
    OptionsBool(bPrintLoaded);
    std::cout << "3. Comprobar cada casilla ";
    OptionsBool(m_juego->GetSSValid());
+   std::cout << "4. Mezclar las suposiciones ";
+   OptionsBool(m_juego->GetSSRand());
 }
 
 #pragma warning(disable:4996)
@@ -106,6 +108,9 @@ Menu::SpecialSettings() {
          break;
       case SS_VALIDOESPECIAL:
          m_juego->ChangeSSValid();
+         break;
+      case SS_MEZCLA:
+         m_juego->ChangeSSRand();
          break;
       case SS_SALIR:
       default:

@@ -123,12 +123,10 @@ Sudoku::probar(bool bError) {
       // Elegimos la casilla en la que vamos a actuar y generamos la lista de candidatos
       nueva.listar(elegir());
       if (nueva.candidatos.size() == 0) {
-         cout << IMPOSSIBLE_SUDOKU;
          return false;
       }
-#if (!_DEBUG || true)
-      nueva.mezcla();
-#endif
+      if (GetSSRand())
+         nueva.mezcla();
       CONTENT_IN(m_tablero, nueva.atacar) = nueva.candidatos[0];
       suposiciones.push_back(nueva);
       Comentar(NUEVA_SUP, LAST_ELEMENT(suposiciones));
@@ -163,7 +161,6 @@ Sudoku::probar(bool bError) {
             }
          }
          if (suposiciones.size() < 1) {
-            cout << IMPOSSIBLE_SUDOKU;
             return false;
          }
          // Recuperamos el estado anterior a la suposición

@@ -11,7 +11,7 @@ private:
    Sudoku* m_juego;
    bool bDefaultLoaded =  false;
    bool bPrintLoaded = false;
-   std::string strAutomaticLoad = _S("001");
+   std::string strAutomaticLoad = _S("23112020 181908");
 
    bool ej(int n);
    void print();
@@ -34,5 +34,6 @@ public:
 #define SS_COMENTAR        1
 #define SS_GUARDARCARGADO  2
 #define SS_VALIDOESPECIAL  3
+#define SS_MEZCLA          4
 
 
