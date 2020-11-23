@@ -68,7 +68,7 @@ public:
    // Validez de contenido en una casilla
    bool comprobar(int const fila, int const columna, int const n);
    bool comprobar(casilla const& place, int const n);
-   bool comprobarEspecial();
+   bool esResoluble();
    int  posibleNumeroEn(int const fila, int const columna, int& candidato);
    int  posiblenumeroEn(casilla const& place, int& candidato);
 

@@ -12,7 +12,7 @@ Sudoku::comprobar(int const fila, int const columna, int const n) {
    if (n == 0) // Siempre es posible vaciar una casilla
       return true;
    if (GetSSValid() && fila + columna != 16)
-      return comprobarEspecial();
+      return esResoluble();
    for (int k = 0; k < 9; k++) { //comprueba atendiendo a la fila
       if (CONTENT(fila, k) == n && k != columna)
          return false;
@@ -36,7 +36,7 @@ Sudoku::comprobar(casilla const& place, int const n)
 }
 
 bool
-Sudoku::comprobarEspecial()
+Sudoku::esResoluble()
 {
    Sudoku* temp;
    bool bOk;
