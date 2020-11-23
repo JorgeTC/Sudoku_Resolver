@@ -14,32 +14,53 @@ class casilla;
 class Sudoku;
 class sup;
 
-class Sudoku {
-   std::vector<sup> suposiciones;
-public:   
-   // Tablero, debiera ser privado
-   casilla m_tablero[9][9];
+struct SSetting {
 #if !_DEBUG
    bool bComentar = false;
 #else
    bool bComentar = true;
 #endif
+   bool bValidSpecial = false;
+};
+
+class Sudoku {
+   std::vector<sup> suposiciones;
+   SSetting   SpecialSettings;
+public:   
+   // Tablero, debiera ser privado
+   casilla m_tablero[9][9];
+
+   
    // Constructor
    Sudoku();
+   Sudoku(int tablero[9][9]);
+   Sudoku(casilla tablero[9][9]);
    bool load(std::string fileName);
    bool pide(bool print = true, bool cursor = true);
+
    // Interfaz básica
    void print();
    void printCur(int const fila, int const columna);
    bool resolver();
+   bool GetSolution();
    bool terminado();
    void vacia();
+   // Interfaz adjustes especiales
+   inline bool    GetSSComent()     { return SpecialSettings.bComentar; };
+   inline bool    GetSSValid()      { return SpecialSettings.bValidSpecial; };
+   inline void    SetSSComent(bool bValue)     { SpecialSettings.bComentar = bValue; };
+   inline void    SetSSValid(bool bValue)      { SpecialSettings.bValidSpecial = bValue; };
+   inline void    ChangeSSComent()  { SpecialSettings.bComentar = !SpecialSettings.bComentar; };
+   inline void    ChangeSSValid()   { SpecialSettings.bValidSpecial = !SpecialSettings.bValidSpecial; };
+
    // Rellenar el tablero
    void copiar(int tablero[9][9]);
+   void copiar(casilla tablero[9][9]);
 
    // Validez de contenido en una casilla
    bool comprobar(int const fila, int const columna, int const n);
    bool comprobar(casilla const& place, int const n);
+   bool comprobarEspecial(int const fila, int const columna, int const n);
    int  posibleNumeroEn(int const fila, int const columna, int& candidato);
    int  posiblenumeroEn(casilla const& place, int& candidato);
 
@@ -56,7 +77,7 @@ private:
    bool  estudiaColumna(int const columna);
    void actualizaLista(std::vector<int>& list, int objetivo);
          // Suponer en una casilla
-   int  probar(bool bError);
+          int  probar(bool bError);
          // Elegir la mejor casilla para la suposición
    casilla elegir();
    // Funciones auxiliares para elegir

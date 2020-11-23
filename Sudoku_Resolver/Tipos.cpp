@@ -11,6 +11,8 @@ Sudoku::comprobar(int const fila, int const columna, int const n) {
       return false;
    if (n == 0) // Siempre es posible vaciar una casilla
       return true;
+   if (GetSSValid())
+      return comprobarEspecial(fila, columna, n);
    for (int k = 0; k < 9; k++) { //comprueba atendiendo a la fila
       if (CONTENT(fila, k) == n && k != columna)
          return false;
@@ -31,6 +33,16 @@ bool
 Sudoku::comprobar(casilla const& place, int const n)
 {
    return comprobar(place.fila, place.columna, n);
+}
+
+bool
+Sudoku::comprobarEspecial(int const fila, int const columna, int const n)
+{
+   Sudoku* temp;
+
+   temp = new Sudoku(this->m_tablero);
+   temp->SetSSComent(false);
+   return temp->resolver();
 }
 
 
@@ -345,7 +357,7 @@ Sudoku::emptyInCuad(casilla tablero[9][9], int nCuad, int &cont) {
 
 void
 Sudoku::Comentar(int nMessage, int nFila, int nColumna){
-   if (!bComentar)
+   if (!GetSSComent())
       return;
    switch (nMessage) {
    case DESCARTAR:
@@ -370,7 +382,7 @@ Sudoku::Comentar(int nMessage, int nFila, int nColumna){
 
 void
 Sudoku::Comentar(int nMessage, sup Suposicion){
-   if (!bComentar)
+   if (!GetSSComent())
       return;
    switch (nMessage) {
    case NUEVA_SUP:

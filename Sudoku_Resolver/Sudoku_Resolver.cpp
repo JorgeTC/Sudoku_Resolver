@@ -27,8 +27,7 @@ int main()
       Menu   mInicial(&juego);
 
       juego.print();
-      if (!juego.resolver())
-         std::cout << "No se ha podido terminar el Sudoku.";
+      juego.GetSolution();
       std::cin >> bOk;
    }
    return 0;

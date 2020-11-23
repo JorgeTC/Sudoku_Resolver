@@ -39,7 +39,6 @@ Sudoku::resolver()
       case NOT_POSSIBLE_NUMBER:
          if (IS_EMPTY(suposiciones)) {
             // si hay casillas mal puestas y no hay suposiciones, es que el sudoku introducido es imposible
-            print();
             return false;
          }
          else {
@@ -55,9 +54,6 @@ Sudoku::resolver()
          bPuesto = bPuesto || estudiaTablero();
       }
       if (terminado()) {
-         print();
-         cout << "\n¡Sudoku terminado!\n" <<
-            suposiciones.size() << "suposiciones necesarias.";
          return true;
       }
       if (!bPuesto) {
@@ -66,6 +62,21 @@ Sudoku::resolver()
             return false;
       }
    } while (bPuesto);
+}
+
+bool
+Sudoku::GetSolution()
+{
+   if (!resolver()) {
+      std::cout << "No se ha podido terminar el Sudoku.";
+      return false;
+   }
+   else {
+      print();
+      cout << "\n¡Sudoku terminado!\n" <<
+         suposiciones.size() << "suposiciones necesarias.";
+      return true;
+   }
 }
 
 Sudoku::Sudoku() {
@@ -77,6 +88,28 @@ Sudoku::Sudoku() {
          m_tablero[j][k].con = 0;
       }
    }
+}
+
+Sudoku::Sudoku(int tablero[9][9]){
+   for (int j = 0; j < 9; j++) {
+      for (int k = 0; k < 9; k++) {
+         m_tablero[j][k].fila = j;
+         m_tablero[j][k].columna = k;
+         m_tablero[j][k].cuad = LINE_COLUMN_CUADRANT(j, k); //asigna a cada casilla su cuadrante correspondiente
+      }
+   }
+   copiar(tablero);
+}
+
+Sudoku::Sudoku(casilla tablero[9][9]){
+   for (int j = 0; j < 9; j++) {
+      for (int k = 0; k < 9; k++) {
+         m_tablero[j][k].fila = j;
+         m_tablero[j][k].columna = k;
+         m_tablero[j][k].cuad = LINE_COLUMN_CUADRANT(j, k); //asigna a cada casilla su cuadrante correspondiente
+      }
+   }
+   copiar(tablero);
 }
 
 bool
@@ -127,7 +160,17 @@ Sudoku::copiar(int tablero[9][9]){
    }
 }
 
-void copiar(casilla tablero[9][9], int ejemplo[9][9]) {
+void
+Sudoku::copiar(casilla tablero[9][9]){
+   for (int k = 0; k < 9; k++) { //carga un tablero con los enteros de una matriz
+      for (int m = 0; m < 9; m++) {
+         m_tablero[k][m].con = tablero[k][m].con;
+      }
+   }
+}
+
+void
+copiar(casilla tablero[9][9], int ejemplo[9][9]) {
    for (int k = 0; k < 9; k++) { //carga un tablero con los enteros de una matriz
       for (int m = 0; m < 9; m++) {
          tablero[k][m].con = ejemplo[k][m];

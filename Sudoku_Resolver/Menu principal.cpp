@@ -56,9 +56,11 @@ Menu::printSS()
    std::cout << "Ajustes especiales.\n" <<
       "0. Salir\n" <<
       "1. Imprimir proceso ";
-   OptionsBool(m_juego->bComentar);
+   OptionsBool(m_juego->GetSSComent());
    std::cout << "2. Guardar tablero cargado ";
    OptionsBool(bPrintLoaded);
+   std::cout << "3. Comprobar cada casilla ";
+   OptionsBool(m_juego->GetSSValid());
 }
 
 #pragma warning(disable:4996)
@@ -97,10 +99,13 @@ Menu::SpecialSettings() {
       std::cin >> nAns;
       switch (nAns) {
       case SS_COMENTAR:
-         m_juego->bComentar = !m_juego->bComentar;
+         m_juego->ChangeSSComent();
          break;
       case SS_GUARDARCARGADO:
          bPrintLoaded = !bPrintLoaded;
+         break;
+      case SS_VALIDOESPECIAL:
+         m_juego->ChangeSSValid();
          break;
       case SS_SALIR:
       default:

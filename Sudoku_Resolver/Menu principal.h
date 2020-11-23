@@ -33,5 +33,6 @@ public:
 #define SS_SALIR           0
 #define SS_COMENTAR        1
 #define SS_GUARDARCARGADO  2
+#define SS_VALIDOESPECIAL  3
 
 
