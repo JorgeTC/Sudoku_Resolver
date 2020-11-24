@@ -163,6 +163,7 @@ Interfaz::ToChar(int nint)
 void
 Interfaz::ReturnNumbers()
 {
+   // Cuando se ha introducido un tablero a mano y todos los símbolos son números
    int tablero[9][9];
    string aux;
 
@@ -176,6 +177,7 @@ Interfaz::ReturnNumbers()
          }
       }
    }
+   // Reestauro los valores de los símbolos
    simbols[0] = '1'; simbols[1] = '2'; simbols[2] = '3';
    simbols[3] = '4'; simbols[4] = '5'; simbols[5] = '6';
    simbols[6] = '7'; simbols[7] = '8'; simbols[8] = '9';
