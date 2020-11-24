@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Interfaz.h"
 #include "Suponer.h"
+#include "Matriz.h"
 #include <string> 
 
 
@@ -80,6 +81,8 @@ Interfaz::pide(bool bPrint /*= true*/, bool bCursor /*= true*/) { //introducir p
          puesto = false;
       }
    }
+   if (!bSimbols)
+      ReturnNumbers();
    return true;
 }
 
@@ -111,12 +114,13 @@ Interfaz::CharACasilla(std::string schar, int* contenido) {
             simbols[nInd] = aux;
          }
       }
-      else
+      else {
          simbols[iIndexSimbol] = input;
+         bSimbols = true;
+      }
       iIndexSimbol++;
    }
    *contenido = ToInt(input);
-   bSimbols = true;
 }
 
 bool
@@ -138,7 +142,8 @@ Interfaz::ToInt(char newChar)
    }
 }
 
-int Interfaz::GetIndex(char newChar)
+int
+Interfaz::GetIndex(char newChar)
 {
    for (int i = 0; i < 9; i++) {
       if (newChar == simbols[i])
@@ -152,11 +157,30 @@ Interfaz::ToChar(int nint)
 {
    if (nint == 0)
       return ' ';
-   if (!bSimbols) {
-      string aux = to_string(nint);
-      return aux[0];
-   }
    return simbols[nint - 1];
+}
+
+void
+Interfaz::ReturnNumbers()
+{
+   int tablero[9][9];
+   string aux;
+
+   for (int i = 0; i < 9; i++) {
+      for (int j = 0; j < 9; j++) {
+         if (m_tablero[i][j].con == 0)
+            tablero[i][j] = 0;
+         else {
+            aux = ToChar(m_tablero[i][j].con);
+            tablero[i][j] = stoi(aux);
+         }
+      }
+   }
+   simbols[0] = '1'; simbols[1] = '2'; simbols[2] = '3';
+   simbols[3] = '4'; simbols[4] = '5'; simbols[5] = '6';
+   simbols[6] = '7'; simbols[7] = '8'; simbols[8] = '9';
+
+   copiar(m_tablero, tablero);
 }
 
 void

@@ -20,6 +20,7 @@ public:
    int  ToInt(char newChar);
    int  GetIndex(char newChar);
    char ToChar(int nint);
+   void ReturnNumbers();
 
    void Comentar(int nMessage, int nFila, int nColumna);
    void Comentar(int nMessage, sup Suposicion);
