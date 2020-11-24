@@ -106,6 +106,6 @@ private:
 #define ESTUDIA_COL     4
 #define NUEVA_SUP       5
 #define DESCARTA_SUP    6
-#define DESCARTA_CAS    7
+#define DESCARTAR_IMP   8
 
 #endif // ! TIPOS_H

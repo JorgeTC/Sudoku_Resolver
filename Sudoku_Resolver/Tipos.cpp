@@ -117,6 +117,7 @@ Sudoku::descartar() {
          for (int j = 0; j < 9; j++) { // bucle doble para recorrer todo el tablero
             switch (descarte(i, j)) {
             case NOT_POSSIBLE_NUMBER: //cout << "Error al descartar.";
+               Comentar(DESCARTAR_IMP, i, j);
                return NOT_POSSIBLE_NUMBER;
                //caso en el que haya una casilla vacía que no acepta ningún número
             case ONLY_ONE_POSSIBLE:
@@ -367,6 +368,11 @@ Sudoku::Comentar(int nMessage, int nFila, int nColumna){
    case DESCARTAR:
       std::cout << "En la fila " << nFila << ", columna " << nColumna << " solo puede ir " << CONTENT(nFila, nColumna);
       break;
+   case DESCARTAR_IMP:
+      // No es necesario imprimir el tablero en este caso
+      std::cout << "En la fila " << nFila << ", columna " << nColumna << " no puede ir ningún número.\n";
+      return;
+      break;
    case ESTUDIA_CUAD:
       std::cout << "En el cuadrante " << LINE_COLUMN_CUADRANT(nFila, nColumna) << " el número " << CONTENT(nFila, nColumna) <<
          " sólo puede ir en la fila " << nFila << " y columna " << nColumna;
@@ -390,7 +396,7 @@ Sudoku::Comentar(int nMessage, sup Suposicion){
       return;
    switch (nMessage) {
    case NUEVA_SUP:
-      std::cout << "En la fila " << Suposicion.atacar.fila << " columna " << Suposicion.atacar.columna << " solo puden ir ";
+      std::cout << "En la fila " << Suposicion.atacar.fila << ", columna " << Suposicion.atacar.columna << " solo pueden ir ";
       for (int i = 0; i < Suposicion.candidatos.size(); i++){
          std::cout << Suposicion.candidatos[i];
          if (i == Suposicion.candidatos.size() - 2)
@@ -398,10 +404,10 @@ Sudoku::Comentar(int nMessage, sup Suposicion){
          else if (i < Suposicion.candidatos.size() - 2)
             std::cout << ", ";
       }
-      std::cout << "\nSupongo que va un " << Suposicion.candidatos[0];
+      std::cout << "\nSupongo que va un " << Suposicion.candidatos[0] << ".";
       break;
    case DESCARTA_SUP:
-      std::cout << "En la fila " << Suposicion.atacar.fila << " columna " << Suposicion.atacar.columna << " solo puden ir ";
+      std::cout << "En la fila " << Suposicion.atacar.fila << ", columna " << Suposicion.atacar.columna << " solo pueden ir ";
       for (int i = 0; i < Suposicion.candidatos.size(); i++) {
          std::cout << Suposicion.candidatos[i];
          if (i == Suposicion.candidatos.size() - 2)
@@ -409,12 +415,17 @@ Sudoku::Comentar(int nMessage, sup Suposicion){
          else if (i < Suposicion.candidatos.size() - 2)
             std::cout << ", ";
       }
-      std::cout << "\nNo puede ir " << Suposicion.candidatos[Suposicion.indice - 1];
-      std::cout << "\nSupongo que va un " << Suposicion.candidatos[Suposicion.indice];
+      std::cout << ".\nNo puede ir ";
+      for (int i = 0; i < Suposicion.indice; i++) {
+         std::cout << Suposicion.candidatos[i];
+         if (i == Suposicion.indice - 2)
+            std::cout << " ni ";
+         else if (i < Suposicion.indice - 2 && Suposicion.indice != 1)
+            std::cout << ", ";
+      }
+      if (Suposicion.indice < Suposicion.candidatos.size())
+         std::cout << "\nSupongo que va un " << Suposicion.candidatos[Suposicion.indice] << ".";
       break;
-   case DESCARTA_CAS:
-      std::cout << "En la fila " << Suposicion.atacar.fila << " columna " << Suposicion.atacar.columna << " no puede ir ningún número.";
-      return;
    }
    print();
 }
