@@ -17,15 +17,12 @@ class sup;
 struct SSetting {
 #if !_DEBUG
    bool bComentar = false;
-#else
-   bool bComentar = true;
-#endif
-   bool bValidSpecial = false;
-#if !_DEBUG
    bool bRandSuposition = true;
 #else
+   bool bComentar = true;
    bool bRandSuposition = false;
 #endif
+   bool bValidSpecial = false;
 };
 
 class Sudoku {
