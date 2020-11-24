@@ -3,24 +3,9 @@
 #include <string>
 #include "Matriz.h"
 #include "Suponer.h"
+#include "Interfaz.h"
 
-void
-Sudoku::print() {
-   std::cout << "\n";
-   for (int i = 0; i < 9; i++) {
-      if (!(i % 3)) std::cout << HORIZONTAL_LINE;
-      for (int k = 0; k < 9; k++) {
-         if (m_tablero[i][k].con) {
-            std::cout << "| " << m_tablero[i][k].con << " ";
-         }
-         else std::cout << "|   ";
-         if (!((k + 1) % 3))
-            std::cout << "|";
-      }
-      std::cout << "\n";
-   }
-   std::cout << HORIZONTAL_LINE;
-}
+
 
 bool
 Sudoku::resolver()
@@ -88,6 +73,8 @@ Sudoku::Sudoku() {
          m_tablero[j][k].con = 0;
       }
    }
+   // Inicilizo la interfaz
+   m_If = new Interfaz(this);
 }
 
 Sudoku::Sudoku(int tablero[9][9]){
@@ -99,6 +86,8 @@ Sudoku::Sudoku(int tablero[9][9]){
       }
    }
    copiar(tablero);
+   // Inicilizo la interfaz
+   m_If = new Interfaz(this);
 }
 
 Sudoku::Sudoku(casilla tablero[9][9]){
@@ -110,6 +99,8 @@ Sudoku::Sudoku(casilla tablero[9][9]){
       }
    }
    copiar(tablero);
+   // Inicilizo la interfaz
+   m_If = new Interfaz(this);
 }
 
 bool

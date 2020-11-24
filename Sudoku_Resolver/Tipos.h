@@ -13,6 +13,7 @@
 class casilla;
 class Sudoku;
 class sup;
+class Interfaz;
 
 struct SSetting {
 #if !_DEBUG
@@ -27,7 +28,8 @@ struct SSetting {
 
 class Sudoku {
    std::vector<sup> suposiciones;
-   SSetting   SpecialSettings;
+   SSetting    SpecialSettings;
+   Interfaz*    m_If;
 public:   
    // Tablero, debiera ser privado
    casilla m_tablero[9][9];
