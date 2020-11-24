@@ -326,7 +326,7 @@ Sudoku::emptyInCuad(casilla tablero[9][9], int nCuad, int &cont) {
 }
 
 void
-Sudoku::Comentar(int nMessage, int nFila, int nColumna)
+Sudoku::Comentar(int nMessage, int nFila /*= 0*/, int nColumna /*= 0*/)
 {
    m_If->Comentar(nMessage, nFila, nColumna);
 }

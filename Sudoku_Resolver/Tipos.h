@@ -30,9 +30,11 @@ class Sudoku {
    std::vector<sup> suposiciones;
    SSetting    SpecialSettings;
    Interfaz*    m_If;
+   
 public:   
    // Tablero, debiera ser privado
-   casilla m_tablero[9][9];
+   casilla     m_tablero[9][9];
+   int         nSolucionable;
 
    
    // Constructor
@@ -49,6 +51,7 @@ public:
    bool GetSolution();
    bool terminado();
    void vacia();
+   int  CuantasSoluciones();
    // Interfaz adjustes especiales
    inline bool    GetSSComent()     { return SpecialSettings.bComentar; };
    inline bool    GetSSValid()      { return SpecialSettings.bValidSpecial; };
@@ -95,16 +98,21 @@ private:
    void emptyInCuad(int nLine, int& cont);
    void emptyInCuad(casilla tablero[9][9], int nLine, int& cont);
 
-   void Comentar(int nMessage, int nFila, int nColumna);
+   void Comentar(int nMessage, int nFila = 0, int nColumna = 0);
    void Comentar(int nMessage, sup Suposicion);
 };
 
-#define DESCARTAR       1
-#define ESTUDIA_CUAD    2
-#define ESTUDIA_FILA    3
-#define ESTUDIA_COL     4
-#define NUEVA_SUP       5
-#define DESCARTA_SUP    6
-#define DESCARTAR_IMP   8
+#define DESCARTAR          1
+#define ESTUDIA_CUAD       2
+#define ESTUDIA_FILA       3
+#define ESTUDIA_COL        4
+#define NUEVA_SUP          5
+#define CUANTAS_SOLUCIONES 6
+#define DESCARTA_SUP       7
+#define DESCARTAR_IMP      8
+
+#define SIN_SOLUCION       0
+#define UNA_SOLUCION       1
+#define SOL_NO_UNICA       2
 
 #endif // ! TIPOS_H

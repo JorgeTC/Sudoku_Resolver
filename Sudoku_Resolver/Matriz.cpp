@@ -53,15 +53,55 @@ bool
 Sudoku::GetSolution()
 {
    if (!resolver()) {
+      nSolucionable = SIN_SOLUCION;
       std::cout << IMPOSSIBLE_SUDOKU;
       return false;
    }
-   else {
+   else { 
       print();
       cout << "\n¡Sudoku terminado!\n" <<
-         suposiciones.size() << "suposiciones necesarias.";
+         suposiciones.size() << " suposiciones necesarias.";
+      CuantasSoluciones();
+      if (nSolucionable == SOL_NO_UNICA)
+         std::cout << "\nSolución no única.";
+      else if (nSolucionable == UNA_SOLUCION)
+         std::cout << "\nÚnica solución.";
       return true;
    }
+}
+
+int
+Sudoku::CuantasSoluciones() {
+
+   Sudoku* aux;
+   casilla atacar;
+   int     candidato;
+
+   // Asumimos que hemos llegado a solucionar el sudoku
+   for (int i = 0; i < suposiciones.size(); i++) {
+      // Seleccionamos la casilla que acepta varios candidatos
+      atacar = suposiciones[i].atacar;
+      for (int j = 0; j < suposiciones[i].candidatos.size(); j++) {
+         // Recorremos la lista de candidatos
+         candidato = suposiciones[i].candidatos[j];
+
+         // No nos interesa si la elección que se ha hecho es resoluble
+         if (candidato != CONTENT_CS(atacar)) {
+            // Genero un nuevo Sudoku con el estado anterior a la suposición
+            aux = new Sudoku(suposiciones[i].estado);
+            // Introduzco el nuevo candidato
+            aux->CONTENT_CS(atacar) = candidato;
+            if (aux->esResoluble()) {
+               // Me espero que no sea resoluble. Si sí lo es, he encontrado otra solución.
+               nSolucionable = SOL_NO_UNICA;
+               return SOL_NO_UNICA;
+            }
+            delete aux;
+         }
+      }
+   }
+   nSolucionable = UNA_SOLUCION;
+   return UNA_SOLUCION;
 }
 
 Sudoku::Sudoku() {
