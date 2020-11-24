@@ -18,6 +18,7 @@
 int main()
 {
    bool bOk = true;
+   setlocale(LC_ALL, "spanish");
 
 #if (!_DEBUG || true)
    srand(time(NULL));
