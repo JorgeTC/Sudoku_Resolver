@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Casilla.h" />
     <ClInclude Include="Ejemplos.h" />
+    <ClInclude Include="Interfaz.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="Matriz.h" />
     <ClInclude Include="Menu principal.h" />
@@ -157,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Casilla.cpp" />
+    <ClCompile Include="Interfaz.cpp" />
     <ClCompile Include="Matriz.cpp" />
     <ClCompile Include="Menu principal.cpp" />
     <ClCompile Include="stdafx.cpp">
