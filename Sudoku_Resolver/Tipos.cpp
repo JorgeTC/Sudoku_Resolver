@@ -326,71 +326,13 @@ Sudoku::emptyInCuad(casilla tablero[9][9], int nCuad, int &cont) {
 }
 
 void
-Sudoku::Comentar(int nMessage, int nFila, int nColumna){
-   if (!GetSSComent())
-      return;
-   switch (nMessage) {
-   case DESCARTAR:
-      std::cout << "En la fila " << nFila << ", columna " << nColumna << " solo puede ir " << CONTENT(nFila, nColumna);
-      break;
-   case DESCARTAR_IMP:
-      // No es necesario imprimir el tablero en este caso
-      std::cout << "En la fila " << nFila << ", columna " << nColumna << " no puede ir ningún número.\n";
-      return;
-      break;
-   case ESTUDIA_CUAD:
-      std::cout << "En el cuadrante " << LINE_COLUMN_CUADRANT(nFila, nColumna) << " el número " << CONTENT(nFila, nColumna) <<
-         " sólo puede ir en la fila " << nFila << " y columna " << nColumna;
-      break;
-   case ESTUDIA_FILA:
-      std::cout << "En la fila " << nFila << " el número " << CONTENT(nFila, nColumna) <<
-         " sólo puede ir en la fila " << nFila << " y columna " << nColumna;
-      break;
-   case ESTUDIA_COL:
-      std::cout << "En la columna " << nColumna << " el número " << CONTENT(nFila, nColumna) <<
-         " sólo puede ir en la fila " << nFila << " y columna " << nColumna;
-      break;
-   }
-   print();
-   
+Sudoku::Comentar(int nMessage, int nFila, int nColumna)
+{
+   m_If->Comentar(nMessage, nFila, nColumna);
 }
 
 void
-Sudoku::Comentar(int nMessage, sup Suposicion){
-   if (!GetSSComent())
-      return;
-   switch (nMessage) {
-   case NUEVA_SUP:
-      std::cout << "En la fila " << Suposicion.atacar.fila << ", columna " << Suposicion.atacar.columna << " solo pueden ir ";
-      for (int i = 0; i < Suposicion.candidatos.size(); i++){
-         std::cout << Suposicion.candidatos[i];
-         if (i == Suposicion.candidatos.size() - 2)
-            std::cout << " y ";
-         else if (i < Suposicion.candidatos.size() - 2)
-            std::cout << ", ";
-      }
-      std::cout << "\nSupongo que va un " << Suposicion.candidatos[0] << ".";
-      break;
-   case DESCARTA_SUP:
-      std::cout << "En la fila " << Suposicion.atacar.fila << ", columna " << Suposicion.atacar.columna << " solo pueden ir ";
-      for (int i = 0; i < Suposicion.candidatos.size(); i++) {
-         std::cout << Suposicion.candidatos[i];
-         if (i == Suposicion.candidatos.size() - 2)
-            std::cout << " y ";
-         else if (i < Suposicion.candidatos.size() - 2)
-            std::cout << ", ";
-      }
-      std::cout << ".\nNo puede ir ";
-      for (int i = 0; i < Suposicion.indice; i++) {
-         std::cout << Suposicion.candidatos[i];
-         if (i == Suposicion.indice - 2)
-            std::cout << " ni ";
-         else if (i < Suposicion.indice - 2 && Suposicion.indice != 1)
-            std::cout << ", ";
-      }
-      if (Suposicion.indice < Suposicion.candidatos.size())
-         std::cout << "\nSupongo que va un " << Suposicion.candidatos[Suposicion.indice] << ".";
-      break;
-   }
-   print();
+Sudoku::Comentar(int nMessage, sup Suposicion)
+{
+   m_If->Comentar(nMessage, Suposicion);
 }
