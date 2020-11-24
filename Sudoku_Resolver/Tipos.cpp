@@ -42,8 +42,8 @@ Sudoku::esResoluble()
    bool bOk;
 
    temp = new Sudoku(m_tablero);
-   temp->SetSSComent(false);
-   temp->SetSSRand(false);
+   temp->SetSSComent(false); // buscamos una solución sin comentarios
+   temp->SetSSRand(false);   // buscamos una solución. No importa cuál.
    bOk = temp->resolver();
    delete temp;
    return bOk;
