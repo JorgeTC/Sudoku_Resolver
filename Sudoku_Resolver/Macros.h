@@ -21,6 +21,8 @@
 #define NOT_POSSIBLE_NUMBER            -1
 #define ONLY_ONE_POSSIBLE              1
 #define MORE_THAN_ONE_POSSIBLE_NUMBER  0
+#define DONE                           2
+#define IMPOSSIBLE                     3
 
 #define MISSING_NUMBER(n)              (45-n)
 

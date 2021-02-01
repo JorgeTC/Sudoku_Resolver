@@ -14,39 +14,56 @@ Sudoku::resolver()
    bool error;
 
    do {
-      bPuesto = false;
       error = false;
-      // Intentamos rellenar por descarte---------------------------------
-      switch (descartar()) { //pone todos los números que puede por descarte
-      case 0:
-         //cout << "\nNo he podido poner ninguna casilla por descarte.";
-         break;
-      case NOT_POSSIBLE_NUMBER:
-         if (IS_EMPTY(suposiciones)) {
-            // si hay casillas mal puestas y no hay suposiciones, es que el sudoku introducido es imposible
+      switch ( razonar(&error) ) {
+         case IMPOSSIBLE:
             return false;
-         }
-         else {
-            error = true;
-         }
-         break;
-      default:
-         bPuesto = true;
-         break;
+         case DONE:
+            return true;
+         default:
+            break;
+      }
+      bPuesto = probar(error);
+      if (!bPuesto)
+         return false;
+   } while (bPuesto);
+}
+
+int
+Sudoku::razonar(bool *error) {
+
+   bool bPuesto = false;
+
+   do {
+      // Intentamos rellenar por descarte---------------------------------
+      switch ( descartar() ) { //pone todos los números que puede por descarte
+         case 0:
+            // No he podido poner ninguna casilla por descarte.
+            bPuesto = false;
+            break;
+         case NOT_POSSIBLE_NUMBER:
+            if ( IS_EMPTY( suposiciones ) ) {
+               // si hay casillas mal puestas y no hay suposiciones, es que el sudoku introducido es imposible
+               return IMPOSSIBLE;
+            }
+            else {
+               *error = true;
+            }
+            break;
+         default:
+            bPuesto = true;
+            break;
       }
       //Intentamos rellenar por estudio------------------------------
-      if (!error && !terminado()) {
+      if ( !error && !terminado() ) {
          bPuesto = bPuesto || estudiaTablero();
       }
-      if (terminado()) {
-         return true;
+      if ( terminado() ) {
+         return DONE;
       }
-      if (!bPuesto) {
-         bPuesto = probar(error);
-         if (!bPuesto)
-            return false;
-      }
-   } while (bPuesto);
+   } while ( bPuesto );
+
+   return 0; // Caso general
 }
 
 bool
