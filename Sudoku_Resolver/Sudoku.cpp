@@ -131,7 +131,7 @@ Sudoku::descartar() {
       }
       exito = exito || puesto;
    } while (puesto);
-   return (int)exito;
+   return int(exito);
 }
 
 bool
