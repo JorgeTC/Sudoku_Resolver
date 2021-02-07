@@ -82,7 +82,7 @@ Trinidad::poner( int candidato ) {
 
    for ( CuadIndex k( m_nMetaFila[0] ); k < 9; ++k ) {
       if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         fila0 = ( 1 << (k.Fila() % 3));
+         fila0 = ( 1 << (k.Columna() % 3));
          break;
       }
    }
@@ -90,14 +90,14 @@ Trinidad::poner( int candidato ) {
       for ( CuadIndex k( m_nMetaFila[0] ); k < 9; ++k ) {
          if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la fila.
-            fila0 = fila0 | ( 1 << ( k.Fila() % 3 ) );
+            fila0 = fila0 | ( 1 << ( k.Columna() % 3 ) );
          }
       }
    }
 
    for ( CuadIndex k( m_nMetaFila[1] ); k < 9; ++k ) {
       if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         fila1 = ( 1 << ( k.Fila() % 3 ) );
+         fila1 = ( 1 << ( k.Columna() % 3 ) );
          break;
       }
    }
@@ -105,14 +105,14 @@ Trinidad::poner( int candidato ) {
       for ( CuadIndex k( m_nMetaFila[1] ); k < 9; ++k ) {
          if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la fila.
-            fila1 = fila1 | ( 1 << ( k.Fila() % 3 ) );
+            fila1 = fila1 | ( 1 << ( k.Columna() % 3 ) );
          }
       }
    }
 
    for ( CuadIndex k( m_nMetaColumna[0] ); k < 9; ++k ) {
       if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         columna0 = ( 1 << ( k.Columna() % 3 ) );
+         columna0 = ( 1 << ( k.Fila() % 3 ) );
          break;
       }
    }
@@ -120,14 +120,14 @@ Trinidad::poner( int candidato ) {
       for ( CuadIndex k( m_nMetaColumna[0] ); k < 9; ++k ) {
          if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la columna.
-            columna0 = columna0 | ( 1 << ( k.Columna() % 3 ) );
+            columna0 = columna0 | ( 1 << ( k.Fila() % 3 ) );
          }
       }
    }
 
    for ( CuadIndex k( m_nMetaColumna[1] ); k < 9; ++k ) {
       if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         columna1 = ( 1 << ( k.Columna() % 3 ) );
+         columna1 = ( 1 << ( k.Fila() % 3 ) );
          break;
       }
    }
@@ -135,7 +135,7 @@ Trinidad::poner( int candidato ) {
       for ( CuadIndex k( m_nMetaColumna[1] ); k < 9; ++k ) {
          if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la columna.
-            columna1 = columna1 | ( 1 << ( k.Columna() % 3 ) );
+            columna1 = columna1 | ( 1 << ( k.Fila() % 3 ) );
          }
       }
    }
