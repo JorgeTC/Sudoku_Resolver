@@ -77,7 +77,6 @@ private:
    bool  estudiaCuadrante(int const cuadrante);
    bool  estudiaFila(int const fila);
    bool  estudiaColumna(int const columna);
-   void actualizaLista(std::vector<int>& list, int objetivo);
    int  razonar( bool* error );
          // Suponer en una casilla
           int  probar(bool bError);

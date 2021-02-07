@@ -253,8 +253,7 @@ Sudoku::estudiaColumna(int const columna) {
    return exito;
 }
 
-void
-Sudoku::actualizaLista(std::vector<int>& list, int objetivo) {
+void actualizaLista(std::vector<int>& list, int objetivo) {
    // Eliminamos objetivo de list
 
    std::vector<int>::iterator index; //el índice de una posición en un vector tiene un tipo propio
@@ -280,8 +279,9 @@ Sudoku::estudiaTablero() {
    return exito;
 }
 
-void Sudoku::emptyInLine(int nLine, int &cont)
-{
+void
+Sudoku::emptyInLine(int nLine, int &cont) {
+   // Devuelve la cantidad de casillas vacï¿½as que hay en la fila introducida
    emptyInLine(m_tablero, nLine, cont);
 }
 
@@ -312,7 +312,8 @@ Sudoku::emptyInCol(casilla tablero[9][9], int nCol, int &cont){
 
 void
 Sudoku::emptyInCuad(int nCuad, int &cont) {
-   emptyInCol(m_tablero, nCuad, cont);
+   // Devuelve la cantidad de casillas vacï¿½as que hay en el cuadrante introducido
+   emptyInCuad(m_tablero, nCuad, cont);
 }
 
 void
