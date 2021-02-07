@@ -1,7 +1,7 @@
 #pragma once
 #pragma once
 #include "stdafx.h"
-#include "Tipos.h"
+#include "Sudoku.h"
 
 #define IN_RANGE(n, min, max) (n >= min && n <= max)
 #define tamEJ  9

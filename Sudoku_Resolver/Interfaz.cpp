@@ -149,6 +149,7 @@ Interfaz::GetIndex(char newChar)
       if (newChar == simbols[i])
          return i;
    }
+   // El character es nuevo, no se encunetra en la lista
    return -1;
 }
 
@@ -186,27 +187,27 @@ Interfaz::ReturnNumbers()
 }
 
 void
-Interfaz::Comentar(int nMessage, int nFila, int nColumna) {
+Interfaz::Comentar( COMENT_CODE nMessage, int nFila, int nColumna) {
    if (!m_ps->GetSSComent())
       return;
    switch (nMessage) {
-   case DESCARTAR:
+   case COMENT_CODE::DESCARTAR:
       std::cout << "En la fila " << nFila << ", columna " << nColumna << " solo puede ir " << ToChar(CONTENT(nFila, nColumna));
       break;
-   case DESCARTAR_IMP:
+   case COMENT_CODE::DESCARTAR_IMP:
       // No es necesario imprimir el tablero en este caso
       std::cout << "En la fila " << nFila << ", columna " << nColumna << " no puede ir ningún número.\n";
       return;
       break;
-   case ESTUDIA_CUAD:
+   case COMENT_CODE::ESTUDIA_CUAD:
       std::cout << "En el cuadrante " << LINE_COLUMN_CUADRANT(nFila, nColumna) << " el número " << ToChar(CONTENT(nFila, nColumna)) <<
          " sólo puede ir en la fila " << nFila << " y columna " << nColumna;
       break;
-   case ESTUDIA_FILA:
+   case COMENT_CODE::ESTUDIA_FILA:
       std::cout << "En la fila " << nFila << " el número " << ToChar(CONTENT(nFila, nColumna)) <<
          " sólo puede ir en la fila " << nFila << " y columna " << nColumna;
       break;
-   case ESTUDIA_COL:
+   case COMENT_CODE::ESTUDIA_COL:
       std::cout << "En la columna " << nColumna << " el número " << ToChar(CONTENT(nFila, nColumna)) <<
          " sólo puede ir en la fila " << nFila << " y columna " << nColumna;
       break;
@@ -215,11 +216,11 @@ Interfaz::Comentar(int nMessage, int nFila, int nColumna) {
 }
 
 void
-Interfaz::Comentar(int nMessage, sup Suposicion) {
+Interfaz::Comentar( COMENT_CODE nMessage, sup Suposicion) {
    if (!m_ps->GetSSComent())
       return;
    switch (nMessage) {
-   case NUEVA_SUP:
+   case COMENT_CODE::NUEVA_SUP:
       std::cout << "En la fila " << Suposicion.atacar.fila << ", columna " << Suposicion.atacar.columna << " solo pueden ir ";
       for (int i = 0; i < Suposicion.candidatos.size(); i++) {
          std::cout << ToChar(Suposicion.candidatos[i]);
@@ -230,7 +231,7 @@ Interfaz::Comentar(int nMessage, sup Suposicion) {
       }
       std::cout << "\nSupongo que va un " << ToChar(Suposicion.candidatos[0]) << ".";
       break;
-   case DESCARTA_SUP:
+   case COMENT_CODE::DESCARTA_SUP:
       std::cout << "En la fila " << Suposicion.atacar.fila << ", columna " << Suposicion.atacar.columna << " solo pueden ir ";
       for (int i = 0; i < Suposicion.candidatos.size(); i++) {
          std::cout << ToChar(Suposicion.candidatos[i]);

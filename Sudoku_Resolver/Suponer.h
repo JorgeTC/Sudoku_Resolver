@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <random>
-#include "tipos.h"
+#include "Sudoku.h"
 #include "Casilla.h"
 #include "Macros.h"
 

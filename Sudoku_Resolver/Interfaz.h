@@ -1,7 +1,20 @@
 #pragma once
 #include "stdafx.h"
-#include "Tipos.h"
+#include "Sudoku.h"
 #include <string>
+
+
+enum class COMENT_CODE
+{
+   DESCARTAR = 1,
+   ESTUDIA_CUAD = 2,
+   ESTUDIA_FILA = 3,
+   ESTUDIA_COL = 4,
+   NUEVA_SUP = 5,
+   CUANTAS_SOLUCIONES = 6,
+   DESCARTA_SUP = 7,
+   DESCARTAR_IMP = 8
+};
 
 class Interfaz {
    Sudoku*  m_ps;
@@ -22,6 +35,6 @@ public:
    char ToChar(int nint);
    void ReturnNumbers();
 
-   void Comentar(int nMessage, int nFila, int nColumna);
-   void Comentar(int nMessage, sup Suposicion);
+   void Comentar( COMENT_CODE nMessage, int nFila, int nColumna);
+   void Comentar( COMENT_CODE nMessage, sup Suposicion);
 };

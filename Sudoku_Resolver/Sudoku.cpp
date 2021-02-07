@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Tipos.h"
+#include "Sudoku.h"
 #include "Suponer.h"
 #include "Casilla.h"
 #include "Interfaz.h"
@@ -118,11 +118,11 @@ Sudoku::descartar() {
          for (int j = 0; j < 9; j++) { // bucle doble para recorrer todo el tablero
             switch (descarte(i, j)) {
             case NOT_POSSIBLE_NUMBER: //cout << "Error al descartar.";
-               Comentar(DESCARTAR_IMP, i, j);
+               Comentar( COMENT_CODE::DESCARTAR_IMP, i, j);
                return NOT_POSSIBLE_NUMBER;
                //caso en el que haya una casilla vacía que no acepta ningún número
             case ONLY_ONE_POSSIBLE:
-               Comentar(DESCARTAR, i, j);
+               Comentar( COMENT_CODE::DESCARTAR, i, j);
                puesto = true;
             default:
                break;
@@ -178,7 +178,7 @@ Sudoku::estudiaCuadrante(int const cuadrante) {
             CONTENT_IN(m_tablero, candidata) = faltan[i];
             puesto = true;
             exito = true;
-            Comentar(ESTUDIA_CUAD, candidata.fila, candidata.columna);
+            Comentar( COMENT_CODE::ESTUDIA_CUAD, candidata.fila, candidata.columna);
          }
       }
    }
@@ -212,7 +212,7 @@ Sudoku::estudiaFila(int const fila) {
             m_tablero[fila][candidata.columna].con = faltan[i];
             puesto = true;
             exito = true;
-            Comentar(ESTUDIA_FILA, fila, candidata.columna);
+            Comentar( COMENT_CODE::ESTUDIA_FILA, fila, candidata.columna);
          }
       }
    }
@@ -246,7 +246,7 @@ Sudoku::estudiaColumna(int const columna) {
             m_tablero[candidata.fila][columna].con = faltan[i];
             puesto = true;
             exito = true;
-            Comentar(ESTUDIA_COL, candidata.fila, columna);
+            Comentar( COMENT_CODE::ESTUDIA_COL, candidata.fila, columna);
          }
       }
    }
@@ -326,13 +326,13 @@ Sudoku::emptyInCuad(casilla tablero[9][9], int nCuad, int &cont) {
 }
 
 void
-Sudoku::Comentar(int nMessage, int nFila /*= 0*/, int nColumna /*= 0*/)
+Sudoku::Comentar( COMENT_CODE nMessage, int nFila /*= 0*/, int nColumna /*= 0*/)
 {
    m_If->Comentar(nMessage, nFila, nColumna);
 }
 
 void
-Sudoku::Comentar(int nMessage, sup Suposicion)
+Sudoku::Comentar( COMENT_CODE nMessage, sup Suposicion)
 {
    m_If->Comentar(nMessage, Suposicion);
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Tipos.h"
+#include "Sudoku.h"
 
 
 void copiar(casilla tablero[9][9], int ejemplo[9][9]);

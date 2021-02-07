@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Suponer.h"
 #include "Matriz.h"
+#include "Interfaz.h" 
 
 void
 sup::listar(casilla x) {
@@ -129,7 +130,7 @@ Sudoku::probar(bool bError) {
          nueva.mezcla();
       CONTENT_IN(m_tablero, nueva.atacar) = nueva.candidatos[0];
       suposiciones.push_back(nueva);
-      Comentar(NUEVA_SUP, LAST_ELEMENT(suposiciones));
+      Comentar( COMENT_CODE::NUEVA_SUP, LAST_ELEMENT(suposiciones));
       LAST_ELEMENT(suposiciones).indice++;
       
 
@@ -142,7 +143,7 @@ Sudoku::probar(bool bError) {
             // Recuperamos el estado anterior a la suposición
          copiar(LAST_ELEMENT(suposiciones).estado);
          // Colocamos la siguiente posibilidad
-         Comentar(DESCARTA_SUP, LAST_ELEMENT(suposiciones));
+         Comentar( COMENT_CODE::DESCARTA_SUP, LAST_ELEMENT(suposiciones));
          CONTENT_IN(m_tablero, LAST_ELEMENT(suposiciones).atacar) = LAST_ELEMENT(suposiciones).candidatos[LAST_ELEMENT(suposiciones).indice];
          // Avanzamos el scroll
          LAST_ELEMENT(suposiciones).indice++;
@@ -153,7 +154,7 @@ Sudoku::probar(bool bError) {
          //se debe descartar una suposición sobre la que se apoya una suposición
          while (!(LAST_ELEMENT(suposiciones).indice < LAST_ELEMENT(suposiciones).candidatos.size()) &&
             !IS_EMPTY(suposiciones)) {
-            Comentar(DESCARTA_SUP, LAST_ELEMENT(suposiciones));
+            Comentar( COMENT_CODE::DESCARTA_SUP, LAST_ELEMENT(suposiciones));
             // Debemos comprobar en cada iteración que suposiciones no sea vacío
             suposiciones.pop_back();
             if (IS_EMPTY(suposiciones)) {
@@ -165,7 +166,7 @@ Sudoku::probar(bool bError) {
          }
          // Recuperamos el estado anterior a la suposición
          copiar(LAST_ELEMENT(suposiciones).estado);
-         Comentar(DESCARTA_SUP, LAST_ELEMENT(suposiciones));
+         Comentar( COMENT_CODE::DESCARTA_SUP, LAST_ELEMENT(suposiciones));
          CONTENT_CS(LAST_ELEMENT(suposiciones).atacar) = LAST_ELEMENT(suposiciones).candidatos[LAST_ELEMENT(suposiciones).indice];
          // Avanzamos el scroll
          LAST_ELEMENT(suposiciones).indice++;

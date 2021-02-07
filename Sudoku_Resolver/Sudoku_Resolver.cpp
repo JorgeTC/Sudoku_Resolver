@@ -7,7 +7,7 @@
 #include <iostream>
 #include <random>
 #include <time.h> 
-#include "Tipos.h"
+#include "Sudoku.h"
 #include "Suponer.h"
 #include "Matriz.h"
 #include "Ejemplos.h"

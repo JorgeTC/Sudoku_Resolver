@@ -151,10 +151,11 @@
     <ClInclude Include="Macros.h" />
     <ClInclude Include="Matriz.h" />
     <ClInclude Include="Menu principal.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Suponer.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Tipos.h" />
+    <ClInclude Include="Sudoku.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Casilla.cpp" />
@@ -169,7 +170,7 @@
     </ClCompile>
     <ClCompile Include="Sudoku_Resolver.cpp" />
     <ClCompile Include="Suponer.cpp" />
-    <ClCompile Include="Tipos.cpp" />
+    <ClCompile Include="Sudoku.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
