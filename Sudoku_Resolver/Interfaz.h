@@ -13,8 +13,11 @@ enum class COMENT_CODE
    NUEVA_SUP = 5,
    CUANTAS_SOLUCIONES = 6,
    DESCARTA_SUP = 7,
-   DESCARTAR_IMP = 8
+   DESCARTAR_IMP = 8,
+   TRINIDAD = 9
 };
+
+class Trinidad;
 
 class Interfaz {
    Sudoku*  m_ps;
@@ -37,4 +40,5 @@ public:
 
    void Comentar( COMENT_CODE nMessage, int nFila, int nColumna);
    void Comentar( COMENT_CODE nMessage, sup Suposicion);
+   void Comentar( COMENT_CODE nMessage, Trinidad tr );
 };

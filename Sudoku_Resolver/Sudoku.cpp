@@ -3,6 +3,8 @@
 #include "Suponer.h"
 #include "Casilla.h"
 #include "Interfaz.h"
+#include "Matriz.h"
+#include "Trinidad.h"
 #include <vector>
 
 bool
@@ -253,6 +255,28 @@ Sudoku::estudiaColumna(int const columna) {
    return exito;
 }
 
+bool
+Sudoku::trinidad() {
+   int nEmpty;
+
+   // Itero los cuadrantes
+   for ( int i = 0; i < 9; i++ ) {
+      // necesito que el cuadrante no esté completo para llamar a la trinidad
+      emptyInCuad(i, nEmpty);
+      if ( nEmpty > 0 ) {
+         Trinidad tr( this, i );
+         if ( tr.ponUnNumero() ) {
+            // No me permito que ponga más de una posición.
+            // Prefiero llamar a otras funciones mientras sea posible.
+            Comentar( COMENT_CODE::TRINIDAD, tr );
+            return true;
+         }
+      }
+   }
+
+   return false;
+}
+
 void actualizaLista(std::vector<int>& list, int objetivo) {
    // Eliminamos objetivo de list
 
@@ -281,7 +305,7 @@ Sudoku::estudiaTablero() {
 
 void
 Sudoku::emptyInLine(int nLine, int &cont) {
-   // Devuelve la cantidad de casillas vacï¿½as que hay en la fila introducida
+   // Devuelve la cantidad de casillas vacías que hay en la fila introducida
    emptyInLine(m_tablero, nLine, cont);
 }
 
@@ -297,6 +321,7 @@ Sudoku::emptyInLine(casilla tablero[9][9], int nLine, int &cont){
 
 void
 Sudoku::emptyInCol(int nCol, int &cont){
+   // Devuelve la cantidad de casillas vacías que hay en la columna introducida
    emptyInCol(m_tablero, nCol, cont);
 }
 
@@ -312,7 +337,7 @@ Sudoku::emptyInCol(casilla tablero[9][9], int nCol, int &cont){
 
 void
 Sudoku::emptyInCuad(int nCuad, int &cont) {
-   // Devuelve la cantidad de casillas vacï¿½as que hay en el cuadrante introducido
+   // Devuelve la cantidad de casillas vacías que hay en el cuadrante introducido
    emptyInCuad(m_tablero, nCuad, cont);
 }
 
@@ -327,13 +352,19 @@ Sudoku::emptyInCuad(casilla tablero[9][9], int nCuad, int &cont) {
 }
 
 void
-Sudoku::Comentar( COMENT_CODE nMessage, int nFila /*= 0*/, int nColumna /*= 0*/)
-{
+Sudoku::Comentar( COMENT_CODE nMessage, int nFila /*= 0*/, int nColumna /*= 0*/) {
+   // Llamo a la interfaz
    m_If->Comentar(nMessage, nFila, nColumna);
 }
 
 void
-Sudoku::Comentar( COMENT_CODE nMessage, sup Suposicion)
-{
+Sudoku::Comentar( COMENT_CODE nMessage, sup Suposicion) {
+   // Llamo a la interfaz
    m_If->Comentar(nMessage, Suposicion);
+}
+
+void
+Sudoku::Comentar( COMENT_CODE nMessage, Trinidad tr ) {
+   // Llamo a la interfaz
+   m_If->Comentar( nMessage, tr );
 }

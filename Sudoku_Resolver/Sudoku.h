@@ -14,6 +14,7 @@
 class casilla;
 class Sudoku;
 class sup;
+class Trinidad;
 class Interfaz;
 enum class COMENT_CODE;
 
@@ -74,9 +75,10 @@ private:
    int  descarte(casilla const& place);
          // Resolución más delicada
    bool  estudiaTablero();
-   bool  estudiaCuadrante(int const cuadrante);
-   bool  estudiaFila(int const fila);
-   bool  estudiaColumna(int const columna);
+      bool  estudiaCuadrante(int const cuadrante);
+      bool  estudiaFila(int const fila);
+      bool  estudiaColumna(int const columna);
+   bool  trinidad();
    int  razonar( bool* error );
          // Suponer en una casilla
           int  probar(bool bError);
@@ -92,6 +94,7 @@ private:
 
    void Comentar( COMENT_CODE nMessage, int nFila = 0, int nColumna = 0);
    void Comentar( COMENT_CODE nMessage, sup Suposicion);
+   void Comentar( COMENT_CODE nMessage, Trinidad tr );
 };
 
 #define SIN_SOLUCION       0

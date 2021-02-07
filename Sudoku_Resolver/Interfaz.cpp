@@ -2,6 +2,7 @@
 #include "Interfaz.h"
 #include "Suponer.h"
 #include "Matriz.h"
+#include "Trinidad.h"
 #include <string> 
 
 
@@ -252,5 +253,13 @@ Interfaz::Comentar( COMENT_CODE nMessage, sup Suposicion) {
          std::cout << "\nSupongo que va un " << ToChar(Suposicion.candidatos[Suposicion.indice]) << ".";
       break;
    }
+   print();
+}
+
+void
+Interfaz::Comentar( COMENT_CODE nMessage, Trinidad tr ) {
+   if ( !m_ps->GetSSComent() )
+      return;
+   cout << "Trinidad";
    print();
 }

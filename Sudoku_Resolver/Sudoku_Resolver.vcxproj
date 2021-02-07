@@ -156,6 +156,7 @@
     <ClInclude Include="Suponer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Sudoku.h" />
+    <ClInclude Include="Trinidad.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Casilla.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Sudoku_Resolver.cpp" />
     <ClCompile Include="Suponer.cpp" />
     <ClCompile Include="Sudoku.cpp" />
+    <ClCompile Include="Trinidad.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

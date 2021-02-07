@@ -71,6 +71,12 @@ Sudoku::razonar(bool *error) {
       if ( terminado() )
          return DONE;
 
+      if (!bPuesto)
+         // La trinidad es el razonamiento más profundo que tenemos.
+         // Es preferible usar los dos anteriores.
+         // Recurriremos a la trinidad cuando el descarte y el estudio hayan fracasado
+         bPuesto = trinidad();
+
    } while ( bPuesto );
 
    return 0; // Caso general
