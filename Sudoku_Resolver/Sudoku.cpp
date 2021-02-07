@@ -9,7 +9,7 @@
 
 bool
 Sudoku::comprobar(int const fila, int const columna, int const n) {
-   //comprueba si n es un buen número para introducir en la posicion fila columna
+   //comprueba si n es un buen nï¿½mero para introducir en la posicion fila columna
    if (n < 0 || n > 9) // comprobamos el rango de n
       return false;
    if (n == 0) // Siempre es posible vaciar una casilla
@@ -45,8 +45,8 @@ Sudoku::esResoluble()
    bool bOk;
 
    temp = new Sudoku(m_tablero);
-   temp->SetSSComent(false); // buscamos una solución sin comentarios
-   temp->SetSSRand(false);   // buscamos una solución. No importa cuál.
+   temp->SetSSComent(false); // buscamos una soluciï¿½n sin comentarios
+   temp->SetSSRand(false);   // buscamos una soluciï¿½n. No importa cuï¿½l.
    bOk = temp->resolver();
    delete temp;
    return bOk;
@@ -62,7 +62,7 @@ Sudoku::descarte(int const fila, int const columna) {
    case ONLY_ONE_POSSIBLE:
       CONTENT(fila, columna) = candidato;
       return ONLY_ONE_POSSIBLE;
-   case NOT_POSSIBLE_NUMBER: //La casilla está vacía y no se puede poner ningún número
+   case NOT_POSSIBLE_NUMBER: //La casilla estï¿½ vacï¿½a y no se puede poner ningï¿½n nï¿½mero
       return NOT_POSSIBLE_NUMBER;
    default:
       return MORE_THAN_ONE_POSSIBLE_NUMBER;
@@ -78,14 +78,14 @@ Sudoku::descarte(casilla const& place)
 int
 Sudoku::posibleNumeroEn(int const fila, int const columna, int& candidato) {
    if (!EMPTY(m_tablero[fila][columna])) {
-      // No tiene sentido comprobar los posibles números en una casilla no vacía
+      // No tiene sentido comprobar los posibles nï¿½meros en una casilla no vacï¿½a
       return NOT_EMPTY_BOX;
    }
 
    int cuenta = 0;
 
    for (int i = 1; i <= 9 && cuenta < 2; i++) {
-      // Si puedo poner más de un número, salgo del bucle
+      // Si puedo poner mï¿½s de un nï¿½mero, salgo del bucle
       if (comprobar(fila, columna, i)) {
          cuenta++;
          candidato = i;
@@ -110,7 +110,7 @@ Sudoku::posiblenumeroEn(casilla const& place, int& candidato)
 
 int
 Sudoku::descartar() {
-   // Rellenar las casillas en las que solo pueda ir un número
+   // Rellenar las casillas en las que solo pueda ir un nï¿½mero
    bool exito = false;
    bool puesto;
 
@@ -122,7 +122,7 @@ Sudoku::descartar() {
             case NOT_POSSIBLE_NUMBER: //cout << "Error al descartar.";
                Comentar( COMENT_CODE::DESCARTAR_IMP, i, j);
                return NOT_POSSIBLE_NUMBER;
-               //caso en el que haya una casilla vacía que no acepta ningún número
+               //caso en el que haya una casilla vacï¿½a que no acepta ningï¿½n nï¿½mero
             case ONLY_ONE_POSSIBLE:
                Comentar( COMENT_CODE::DESCARTAR, i, j);
                puesto = true;
@@ -261,12 +261,12 @@ Sudoku::trinidad() {
 
    // Itero los cuadrantes
    for ( int i = 0; i < 9; i++ ) {
-      // necesito que el cuadrante no esté completo para llamar a la trinidad
+      // necesito que el cuadrante no estï¿½ completo para llamar a la trinidad
       emptyInCuad(i, nEmpty);
       if ( nEmpty > 0 ) {
          Trinidad tr( this, i );
          if ( tr.ponUnNumero() ) {
-            // No me permito que ponga más de una posición.
+            // No me permito que ponga mï¿½s de una posiciï¿½n.
             // Prefiero llamar a otras funciones mientras sea posible.
             Comentar( COMENT_CODE::TRINIDAD, tr );
             return true;
@@ -280,7 +280,7 @@ Sudoku::trinidad() {
 void actualizaLista(std::vector<int>& list, int objetivo) {
    // Eliminamos objetivo de list
 
-   std::vector<int>::iterator index; //el índice de una posición en un vector tiene un tipo propio
+   std::vector<int>::iterator index; //el ï¿½ndice de una posiciï¿½n en un vector tiene un tipo propio
    index = find(list.begin(), list.end(), objetivo);
    if (index != list.end())
       list.erase(index);
@@ -305,7 +305,7 @@ Sudoku::estudiaTablero() {
 
 void
 Sudoku::emptyInLine(int nLine, int &cont) {
-   // Devuelve la cantidad de casillas vacías que hay en la fila introducida
+   // Devuelve la cantidad de casillas vacï¿½as que hay en la fila introducida
    emptyInLine(m_tablero, nLine, cont);
 }
 
@@ -321,7 +321,7 @@ Sudoku::emptyInLine(casilla tablero[9][9], int nLine, int &cont){
 
 void
 Sudoku::emptyInCol(int nCol, int &cont){
-   // Devuelve la cantidad de casillas vacías que hay en la columna introducida
+   // Devuelve la cantidad de casillas vacï¿½as que hay en la columna introducida
    emptyInCol(m_tablero, nCol, cont);
 }
 
@@ -337,7 +337,7 @@ Sudoku::emptyInCol(casilla tablero[9][9], int nCol, int &cont){
 
 void
 Sudoku::emptyInCuad(int nCuad, int &cont) {
-   // Devuelve la cantidad de casillas vacías que hay en el cuadrante introducido
+   // Devuelve la cantidad de casillas vacï¿½as que hay en el cuadrante introducido
    emptyInCuad(m_tablero, nCuad, cont);
 }
 
