@@ -3,6 +3,7 @@
 #include "Suponer.h"
 #include "Casilla.h"
 #include "Interfaz.h"
+#include "Matriz.h"
 #include <vector>
 
 bool

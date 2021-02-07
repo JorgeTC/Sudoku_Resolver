@@ -87,7 +87,7 @@ Sudoku::GetSolution()
    else { 
       print();
       cout << "\n¡Sudoku terminado!\n" <<
-         suposiciones.size() << " suposiciones necesarias.\n";
+         suposiciones.size() << " suposiciones necesarias.";
       CuantasSoluciones();
       if (nSolucionable == SOL_NO_UNICA)
          std::cout << "\nSolución no única.\n";

@@ -4,7 +4,7 @@
 #include "Sudoku.h"
 
 #define IN_RANGE(n, min, max) (n >= min && n <= max)
-#define tamEJ  9
+#define tamEJ  10
 
 class Menu {
 private:
