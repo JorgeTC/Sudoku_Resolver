@@ -32,35 +32,45 @@ Sudoku::resolver()
 int
 Sudoku::razonar(bool *error) {
 
-   bool bPuesto = false;
+   bool bPuesto;
 
    do {
+      bPuesto = false;
+
       // Intentamos rellenar por descarte---------------------------------
       switch ( descartar() ) { //pone todos los números que puede por descarte
-         case 0:
+         case MORE_THAN_ONE_POSSIBLE_NUMBER:
             // No he podido poner ninguna casilla por descarte.
+            // En todas las casillas vacías hay más de un número posible.
             bPuesto = false;
             break;
          case NOT_POSSIBLE_NUMBER:
-            if ( IS_EMPTY( suposiciones ) ) {
-               // si hay casillas mal puestas y no hay suposiciones, es que el sudoku introducido es imposible
+            // Hay alguna casilla vacía donde no es posible poner ningún número.
+            // Esto significa que la situación actual del Sudoku es imposible.
+            if ( IS_EMPTY( suposiciones ) )
+               // Si hay casillas mal puestas y no hay suposiciones, el sudoku introducido es imposible
                return IMPOSSIBLE;
-            }
             else {
+               // Hay margen de elección para avanzar en las suposiciones.
+               // Guardo esta información para la función de suposiciones.
                *error = true;
+               return 0;
             }
             break;
          default:
             bPuesto = true;
             break;
       }
-      //Intentamos rellenar por estudio------------------------------
-      if ( !error && !terminado() ) {
-         bPuesto = bPuesto || estudiaTablero();
-      }
-      if ( terminado() ) {
+
+      if (terminado() )
          return DONE;
-      }
+
+      // Intentamos rellenar por estudio------------------------------
+      bPuesto = bPuesto || estudiaTablero();
+
+      if ( terminado() )
+         return DONE;
+
    } while ( bPuesto );
 
    return 0; // Caso general
