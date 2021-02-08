@@ -260,6 +260,17 @@ void
 Interfaz::Comentar( COMENT_CODE nMessage, Trinidad tr ) {
    if ( !m_ps->GetSSComent() )
       return;
-   cout << "Trinidad";
+   switch ( tr.nPuesto ) {
+      case DESCARTE:
+         cout << "\nTrinidad ha puesto por descarte.";
+         break;
+      case ESTUDIO:
+         cout << "\nTrinidad ha puesto por estudio.";
+         break;
+      default:
+         return;
+         break;
+   }
+   
    print();
 }
