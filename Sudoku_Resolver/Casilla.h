@@ -32,5 +32,6 @@ public:
    // output interface
    inline int Fila() { return (int)fila + floor(index / 3); };
    inline int Columna() { return (int)columna + index % 3; };
+   inline int Index() { return index; };
 };
 

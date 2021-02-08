@@ -48,25 +48,47 @@ Trinidad::Trinidad( Sudoku* ps, int nCuadrante ) {
          SET_VECTOR( m_nMetaColumna, 2, 5 );
          break;
    }
+
    // Números que faltan por poner en el cuadrante
    for ( CuadIndex k( m_nCuadrante ); k < 9; ++k ) { // Actualizamos la lista faltan
       actualizaLista( m_faltan, m_ps->m_tablero[k.Fila()][k.Columna()].con );
    }
+
+   // No puedo permitirme resolver el sudoku entero para cada comprobación de validez
+   m_bValidOri = m_ps->GetSSValid();
+   m_ps->SetSSValid( false );
+}
+
+Trinidad::~Trinidad() {
+   // Restauro la configuración anterior
+   m_ps->SetSSValid( m_bValidOri );
 }
 
 bool
 Trinidad::ponUnNumero() {
-   for ( int i : m_faltan) {
-      if ( poner(i) )
+
+   if (estudiaCuadrante() )
+      return true;
+
+   return descarte();
+}
+
+bool
+Trinidad::estudiaCuadrante() {
+   // Intento poner algún número haciendo un algoritmo análogo al estudio.
+   for ( int i : m_faltan ) {
+      if ( poner( i ) )
          // No me permito poner más de un número.
          // Prefiero volver a llamar al resto de funciones.
          return true;
    }
+
    return false;
 }
 
 bool
-Trinidad::poner( int candidato ) {
+Trinidad::poner( int i ) {
+   candidato = i;
    // Sabemos que candidato no está ya puesto en nuestro cuadrante
    int fila0 = 0;
    int fila1 = 0;
@@ -76,17 +98,17 @@ Trinidad::poner( int candidato ) {
    int columnaCurr = 0;
    casilla candidata;
    int contador = 0;
-   // No puedo permitirme resolver el sudoku entero para cada comprobación de validez
-   bool bValidOri = m_ps->GetSSValid();
-   m_ps->SetSSValid(false); 
+   
 
    for ( CuadIndex k( m_nMetaFila[0] ); k < 9; ++k ) {
+      // Busco si el candidato está ya colocado en m_nMetaFila[0]
       if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
          fila0 = ( 1 << (k.Fila() % 3));
          break;
       }
    }
    if ( !fila0 ) {
+      // Si no está colocado, busco en qué casillas puede ir
       for ( CuadIndex k( m_nMetaFila[0] ); k < 9; ++k ) {
          if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
               m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
@@ -97,12 +119,14 @@ Trinidad::poner( int candidato ) {
    }
 
    for ( CuadIndex k( m_nMetaFila[1] ); k < 9; ++k ) {
+      // Busco si el candidato está ya colocado en m_nMetaFila[1]
       if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
          fila1 = ( 1 << ( k.Fila() % 3 ) );
          break;
       }
    }
    if ( !fila1 ) {
+      // Si no está colocado, busco en qué casillas puede ir
       for ( CuadIndex k( m_nMetaFila[1] ); k < 9; ++k ) {
          if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
               m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
@@ -147,6 +171,8 @@ Trinidad::poner( int candidato ) {
    normalizar( fila0, fila1, &filaCurr);
    normalizar( columna0, columna1, &columnaCurr );
 
+   // Añado un entero en cuyos bits miro en qué casillas puede ir el candidato
+   m_posibles.push_back( 0 );
    // Itero el cuadrante buscando la única casilla donde pueda ir el candidato
    for ( CuadIndex k( m_nCuadrante ); k < 9; ++k ) {
       if ( !EMPTY(m_ps->m_tablero[k.Fila()][k.Columna()]) )
@@ -158,19 +184,55 @@ Trinidad::poner( int candidato ) {
       if ( filaCurr & ( 1 << k.Fila() % 3 ) &&
            columnaCurr & ( 1 << k.Columna() % 3 ) ) {
          contador++;
-         if (contador > 1 )
-            break;
+
+         // Nada impide que candidato vaya en la casilla que estoy mirando
+         LAST_ELEMENT( m_posibles ) = LAST_ELEMENT( m_posibles ) | ( 1 << k.Index() );
+
+         if (contador > 1 ) // Ya sé que hay más de una casilla donde puede ir el candidato.
+            // Por tanto no tiene sentido que siga sobreescribiendo las casillas.
+            continue;
          candidata.fila = k.Fila();
          candidata.columna = k.Columna();
       }
    }
    if ( contador == 1 ) {
       CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
+      return true;
    }
 
-   // Restauro la configuración anterior
-   m_ps->SetSSValid( bValidOri );
-   return ( contador == 1 );
+   return false;
+}
+
+bool
+Trinidad::descarte() {
+   // Antes de ser llamada necesita haber sido llamada estudiaTablero.
+   // Necesitamos que se haya rellenado m_posibles.
+
+   int nSuma;
+
+   for ( CuadIndex k( m_nCuadrante ); k < 9; ++k ) {
+
+      if (!EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) )
+         continue;
+
+      nSuma = 0;
+      for ( int i = 0; i < m_posibles.size(); i++ ) {
+         // Contamos cuántos números pueden ir en cada casilla.
+         if ( !(m_posibles[i] & ( 1 << k.Index()) ) )
+            continue;
+         if( (++nSuma) > 1)
+            break;
+         // Me espero que m_posibles y m_faltan tengan exactamente la misma cantidad de elementos.
+         candidato = m_faltan[i];
+      }
+
+      if ( nSuma == 1 ) {
+         // Si sólo hay un número que pueda ir en alguna casilla, la rellenamos
+         m_ps->CONTENT(k.Fila(), k.Columna()) = candidato;
+         return true;
+      }
+   }
+   return false;
 }
 
 void

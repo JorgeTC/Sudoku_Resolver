@@ -7,13 +7,20 @@ class Trinidad {
    int   m_nMetaFila[2];
    int   m_nMetaColumna[2];
    std::vector<int> m_faltan = { 1,2,3,4,5,6,7,8,9 };
+   // Guardo en qué casillas del cuadrante puede ir cada uno de los números que faltan
+   std::vector<int> m_posibles;
+   int   candidato;
+   bool  m_bValidOri;
 
    public:
    Trinidad(Sudoku *ps, int nCuadrante);
+   ~Trinidad();
    bool ponUnNumero();
 
    private:
+   bool estudiaCuadrante();
    bool poner(int candidato);
+   bool descarte();
    void normalizar(int vt1, int vt2, int *vtCurr);
 };
 
