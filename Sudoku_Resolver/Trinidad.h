@@ -1,6 +1,13 @@
 #pragma once
 #include "Sudoku.h"
 
+// Valores para la variable nPuesto
+#define NO_PUESTO    0
+#define ESTUDIO      1
+#define DESCARTE     2
+// Macro para asignar valores a MetaFila y MetaColumna
+#define SET_VECTOR(vt, val1, val2)  {vt[0] = val1; vt[1] = val2;}
+
 class Trinidad {
    Sudoku *m_ps;
    int   m_nCuadrante;
@@ -11,6 +18,8 @@ class Trinidad {
    std::vector<int> m_posibles;
    int   candidato;
    bool  m_bValidOri;
+   public:
+   int nPuesto = NO_PUESTO;
 
    public:
    Trinidad(Sudoku *ps, int nCuadrante);
@@ -24,4 +33,3 @@ class Trinidad {
    void normalizar(int vt1, int vt2, int *vtCurr);
 };
 
-#define SET_VECTOR(vt, val1, val2)  {vt[0] = val1; vt[1] = val2;}

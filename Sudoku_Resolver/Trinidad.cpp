@@ -77,10 +77,12 @@ bool
 Trinidad::estudiaCuadrante() {
    // Intento poner algún número haciendo un algoritmo análogo al estudio.
    for ( int i : m_faltan ) {
-      if ( poner( i ) )
+      if ( poner( i ) ) {
          // No me permito poner más de un número.
          // Prefiero volver a llamar al resto de funciones.
+         nPuesto = ESTUDIO;
          return true;
+      }
    }
 
    return false;
@@ -229,6 +231,7 @@ Trinidad::descarte() {
       if ( nSuma == 1 ) {
          // Si sólo hay un número que pueda ir en alguna casilla, la rellenamos
          m_ps->CONTENT(k.Fila(), k.Columna()) = candidato;
+         nPuesto = DESCARTE;
          return true;
       }
    }
