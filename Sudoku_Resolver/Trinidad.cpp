@@ -88,7 +88,8 @@ Trinidad::poner( int candidato ) {
    }
    if ( !fila0 ) {
       for ( CuadIndex k( m_nMetaFila[0] ); k < 9; ++k ) {
-         if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
+         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
+              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la fila.
             fila0 = fila0 | ( 1 << ( k.Fila() % 3 ) );
          }
@@ -101,9 +102,10 @@ Trinidad::poner( int candidato ) {
          break;
       }
    }
-   if ( fila1 < 0 ) {
+   if ( !fila1 ) {
       for ( CuadIndex k( m_nMetaFila[1] ); k < 9; ++k ) {
-         if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
+         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
+              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la fila.
             fila1 = fila1 | ( 1 << ( k.Fila() % 3 ) );
          }
@@ -118,7 +120,8 @@ Trinidad::poner( int candidato ) {
    }
    if ( !columna0 ) {
       for ( CuadIndex k( m_nMetaColumna[0] ); k < 9; ++k ) {
-         if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
+         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
+              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la columna.
             columna0 = columna0 | ( 1 << ( k.Columna() % 3 ) );
          }
@@ -133,7 +136,8 @@ Trinidad::poner( int candidato ) {
    }
    if ( !columna1 ) {
       for ( CuadIndex k( m_nMetaColumna[1] ); k < 9; ++k ) {
-         if ( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
+         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) && 
+              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
             // En tres bits guardamos si el candidato puede ir en la columna.
             columna1 = columna1 | ( 1 << ( k.Columna() % 3 ) );
          }
@@ -151,8 +155,8 @@ Trinidad::poner( int candidato ) {
          continue;
       // No hay ningún número ya puesto que impida a candidato ir en la casilla actual.
       // Veamos si la información guardada en Curr nos dice algo.
-      if ( filaCurr | ( 1 << k.Fila() % 3 ) &&
-           columnaCurr | ( 1 << k.Columna() % 3 ) ) {
+      if ( filaCurr & ( 1 << k.Fila() % 3 ) &&
+           columnaCurr & ( 1 << k.Columna() % 3 ) ) {
          contador++;
          if (contador > 1 )
             break;
