@@ -264,7 +264,7 @@ Sudoku::trinidad() {
       // necesito que el cuadrante no esté completo para llamar a la trinidad
       emptyInCuad(i, nEmpty);
       if ( nEmpty > 0 ) {
-         Trinidad tr( this, i );
+         Trinidad tr( this );
          if ( tr.ponUnNumero() ) {
             // No me permito que ponga más de una posición.
             // Prefiero llamar a otras funciones mientras sea posible.

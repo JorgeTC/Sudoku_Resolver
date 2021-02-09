@@ -5,54 +5,19 @@
 #include <algorithm>
 
 
-Trinidad::Trinidad( Sudoku* ps, int nCuadrante ) {
+Trinidad::Trinidad( Sudoku* ps ) {
    m_ps = ps;
-   m_nCuadrante = nCuadrante;
-   // Guardamos los cuadrantes que están en la misma
-   // metafila y misma metacolumna
-   switch ( m_nCuadrante ) {
-      case 0:
-         SET_VECTOR( m_nMetaFila, 1, 2 );
-         SET_VECTOR( m_nMetaColumna, 3, 6 );
-         break;
-      case 1:
-         SET_VECTOR( m_nMetaFila, 0, 2 );
-         SET_VECTOR(m_nMetaColumna, 4, 7 );
-         break;
-      case 2:
-         SET_VECTOR( m_nMetaFila, 0, 1 );
-         SET_VECTOR( m_nMetaColumna, 5, 8 );
-         break;
-      case 3:
-         SET_VECTOR( m_nMetaFila, 4, 5 );
-         SET_VECTOR( m_nMetaColumna, 0, 6 );
-         break;
-      case 4:
-         SET_VECTOR( m_nMetaFila, 3, 5 );
-         SET_VECTOR( m_nMetaColumna, 1, 7 );
-         break;
-      case 5:
-         SET_VECTOR( m_nMetaFila, 3, 4 );
-         SET_VECTOR( m_nMetaColumna, 2, 8 );
-         break;
-      case 6:
-         SET_VECTOR( m_nMetaFila, 7, 8 );
-         SET_VECTOR( m_nMetaColumna, 0, 3 );
-         break;
-      case 7:
-         SET_VECTOR( m_nMetaFila, 6, 8 );
-         SET_VECTOR( m_nMetaColumna, 1, 4 );
-         break;
-      case 8:
-         SET_VECTOR( m_nMetaFila, 6, 7 );
-         SET_VECTOR( m_nMetaColumna, 2, 5 );
-         break;
-   }
 
-   // Números que faltan por poner en el cuadrante
-   for ( CuadIndex k( m_nCuadrante ); k < 9; ++k ) { // Actualizamos la lista faltan
-      actualizaLista( m_faltan, m_ps->m_tablero[k.Fila()][k.Columna()].con );
+   // Itero los números. Van del 1 al 9.
+   for ( int numero = 1; numero <= 9; numero++ ) {
+      // Veamos en qué casillas puede ir el número i
+      // Itero los cuadrantes. Van del 0 al 8.
+      for ( int cuad = 0; cuad < 9; cuad++ ) {
+         // Haremos el cálculo cuadrante a cuadrante
+         codigoCuadrante(cuad, numero);
+      }
    }
+   normalizarCodigos();
 
    // No puedo permitirme resolver el sudoku entero para cada comprobación de validez
    m_bValidOri = m_ps->GetSSValid();
@@ -67,20 +32,111 @@ Trinidad::~Trinidad() {
 bool
 Trinidad::ponUnNumero() {
 
-   if (estudiaCuadrante() )
+   if ( estudiaTablero() )
       return true;
 
    return descarte();
 }
 
+void
+Trinidad::normalizarCodigos() {
+   int   code1;
+   int   code2;
+   int   code3;
+   for ( int candidato = 1; candidato <= 9; candidato++ ) {
+      // Primero las tres metafilas
+      for ( int i = 0; i <= 6; i+=3 ) {
+         GET_FILA_CODE( code1, m_posibles[candidato - 1][i] );
+         GET_FILA_CODE( code2, m_posibles[candidato - 1][i + 1] );
+         GET_FILA_CODE( code3, m_posibles[candidato - 1][i + 2] );
+         normalizar(&code1, &code2, &code3);
+         SET_FILA_CODE( code1, m_posibles[candidato - 1][i] );
+         SET_FILA_CODE( code2, m_posibles[candidato - 1][i + 1] );
+         SET_FILA_CODE( code3, m_posibles[candidato - 1][i + 2] );
+      }
+      // Las tres metacolumnas
+      for ( int i = 0; i < 3; i++ ) {
+         GET_COLUMN_CODE( code1, m_posibles[candidato - 1][i] );
+         GET_COLUMN_CODE( code2, m_posibles[candidato - 1][i + 3] );
+         GET_COLUMN_CODE( code3, m_posibles[candidato - 1][i + 6] );
+         normalizar( &code1, &code2, &code3 );
+         SET_COLUMN_CODE( code1, m_posibles[candidato - 1][i] );
+         SET_COLUMN_CODE( code2, m_posibles[candidato - 1][i + 3] );
+         SET_COLUMN_CODE( code3, m_posibles[candidato - 1][i + 6] );
+      }
+   }
+   // Aún no hemos cruzado la información de las filas y las columnas.
+}
+
+void
+Trinidad::codigoCuadrante( int cuadrante, int candidato ) {
+
+   short int *currCodigo = &m_posibles[candidato - 1][cuadrante];
+
+   for ( CuadIndex k( cuadrante ); k < 9; ++k ) {
+      // Busco si el candidato está ya colocado en cuadrante
+      if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
+         // Anotamos la fila
+         *currCodigo = ( 1 << ( k.Fila() % 3 ) );
+          // Anotamos la columna
+         *currCodigo = *currCodigo | ( 1 << ( ( k.Columna() % 3) + 3 ) );
+         return;
+      }
+   }
+   // Si no está colocado, busco en qué casillas puede ir
+   for ( CuadIndex k( cuadrante ); k < 9; ++k ) {
+      if ( !EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) )
+         continue;
+      if( m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
+         // En tres bits guardamos si el candidato puede ir en la fila.
+         *currCodigo = *currCodigo | ( 1 << ( k.Fila() % 3 ) );
+         // En los tres siguientes bits anotamos si puede ir en la columna.
+         *currCodigo = *currCodigo | ( 1 << ( ( k.Columna() % 3 ) + 3 ) );
+      }
+   }
+}
+
 bool
-Trinidad::estudiaCuadrante() {
-   // Intento poner algún número haciendo un algoritmo análogo al estudio.
-   for ( int i : m_faltan ) {
-      if ( poner( i ) ) {
-         // No me permito poner más de un número.
-         // Prefiero volver a llamar al resto de funciones.
-         nPuesto = ESTUDIO;
+Trinidad::estudiaTablero() {
+   for ( int k = 0; k < 9; k++ ) {
+      if ( estudiaCuadrante( k ) )
+         return true;
+      if ( estudiaFila( k ) )
+         return true;
+      if ( estudiaColumna( k ) )
+         return true;
+   }
+   return false;
+}
+
+#define POSIBLE_EN(n, fil, col)  bool((m_posibles[n - 1][LINE_COLUMN_CUADRANT(fil, col)] & (1 << (fil % 3))) && \
+                                    (m_posibles[n - 1][LINE_COLUMN_CUADRANT(fil, col)] & (1 << ( (col % 3) + 3 ))))
+
+bool
+Trinidad::estudiaCuadrante( int const cuadrante ) {
+   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   casilla candidata;
+   int contador;
+
+
+   for ( CuadIndex k( cuadrante ); k < 9; ++k ) { // Actualizamos la lista faltan
+      actualizaLista( faltan, m_ps->m_tablero[k.Fila()][k.Columna()].con );
+   }
+
+   for ( int candidato : faltan ) {
+      contador = 0;
+      for ( CuadIndex k( cuadrante ); k < 9; ++k ) {
+         if ( !EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) )
+            continue;
+         if ( POSIBLE_EN( candidato, k.Fila(), k.Columna() ) ) {
+            if ( ( ++contador ) > 1 )
+               break;
+            candidata.fila = k.Fila();
+            candidata.columna = k.Columna();
+         }
+      }
+      if ( contador == 1 ) { // Si solo hemos encontrado una casilla donde puede ir candidato
+         CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
          return true;
       }
    }
@@ -89,121 +145,66 @@ Trinidad::estudiaCuadrante() {
 }
 
 bool
-Trinidad::poner( int i ) {
-   candidato = i;
-   // Sabemos que candidato no está ya puesto en nuestro cuadrante
-   int fila0 = 0;
-   int fila1 = 0;
-   int filaCurr = 0;
-   int columna0 = 0;
-   int columna1 = 0;
-   int columnaCurr = 0;
-   casilla candidata;
-   int contador = 0;
-   
+Trinidad::estudiaFila( int const fila ) {
+   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   casilla candidata; candidata.fila = fila;
+   int contador;
 
-   for ( CuadIndex k( m_nMetaFila[0] ); k < 9; ++k ) {
-      // Busco si el candidato está ya colocado en m_nMetaFila[0]
-      if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         fila0 = ( 1 << (k.Fila() % 3));
-         break;
-      }
-   }
-   if ( !fila0 ) {
-      // Si no está colocado, busco en qué casillas puede ir
-      for ( CuadIndex k( m_nMetaFila[0] ); k < 9; ++k ) {
-         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
-              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
-            // En tres bits guardamos si el candidato puede ir en la fila.
-            fila0 = fila0 | ( 1 << ( k.Fila() % 3 ) );
-         }
-      }
+
+
+   for ( int i = 0; i < 9; i++ ) { // Actualizamos la lista faltan
+      actualizaLista( faltan, m_ps->m_tablero[fila][i].con );
    }
 
-   for ( CuadIndex k( m_nMetaFila[1] ); k < 9; ++k ) {
-      // Busco si el candidato está ya colocado en m_nMetaFila[1]
-      if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         fila1 = ( 1 << ( k.Fila() % 3 ) );
-         break;
-      }
-   }
-   if ( !fila1 ) {
-      // Si no está colocado, busco en qué casillas puede ir
-      for ( CuadIndex k( m_nMetaFila[1] ); k < 9; ++k ) {
-         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
-              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
-            // En tres bits guardamos si el candidato puede ir en la fila.
-            fila1 = fila1 | ( 1 << ( k.Fila() % 3 ) );
-         }
-      }
-   }
-
-   for ( CuadIndex k( m_nMetaColumna[0] ); k < 9; ++k ) {
-      if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         columna0 = ( 1 << ( k.Columna() % 3 ) );
-         break;
-      }
-   }
-   if ( !columna0 ) {
-      for ( CuadIndex k( m_nMetaColumna[0] ); k < 9; ++k ) {
-         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) &&
-              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
-            // En tres bits guardamos si el candidato puede ir en la columna.
-            columna0 = columna0 | ( 1 << ( k.Columna() % 3 ) );
-         }
-      }
-   }
-
-   for ( CuadIndex k( m_nMetaColumna[1] ); k < 9; ++k ) {
-      if ( m_ps->CONTENT( k.Fila(), k.Columna() ) == candidato ) {
-         columna1 = ( 1 << ( k.Columna() % 3 ) );
-         break;
-      }
-   }
-   if ( !columna1 ) {
-      for ( CuadIndex k( m_nMetaColumna[1] ); k < 9; ++k ) {
-         if ( EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) && 
-              m_ps->comprobar( k.Fila(), k.Columna(), candidato ) ) {
-            // En tres bits guardamos si el candidato puede ir en la columna.
-            columna1 = columna1 | ( 1 << ( k.Columna() % 3 ) );
-         }
-      }
-   }
-
-   normalizar( fila0, fila1, &filaCurr);
-   normalizar( columna0, columna1, &columnaCurr );
-
-   // Añado un entero en cuyos bits miro en qué casillas puede ir el candidato
-   m_posibles.push_back( 0 );
-   // Itero el cuadrante buscando la única casilla donde pueda ir el candidato
-   for ( CuadIndex k( m_nCuadrante ); k < 9; ++k ) {
-      if ( !EMPTY(m_ps->m_tablero[k.Fila()][k.Columna()]) )
-         continue;
-      if ( !m_ps->comprobar(k.Fila(), k.Columna(), candidato) )
-         continue;
-      // No hay ningún número ya puesto que impida a candidato ir en la casilla actual.
-      // Veamos si la información guardada en Curr nos dice algo.
-      if ( filaCurr & ( 1 << k.Fila() % 3 ) &&
-           columnaCurr & ( 1 << k.Columna() % 3 ) ) {
-         contador++;
-
-         // Nada impide que candidato vaya en la casilla que estoy mirando
-         LAST_ELEMENT( m_posibles ) = LAST_ELEMENT( m_posibles ) | ( 1 << k.Index() );
-
-         if (contador > 1 ) // Ya sé que hay más de una casilla donde puede ir el candidato.
-            // Por tanto no tiene sentido que siga sobreescribiendo las casillas.
+   for ( int candidato : faltan ) {
+      contador = 0;
+      for ( int j = 0; j < 9; j++ ) {
+         if ( !EMPTY( m_ps->m_tablero[fila][j] ) )
             continue;
-         candidata.fila = k.Fila();
-         candidata.columna = k.Columna();
+         if( POSIBLE_EN( candidato, fila, j ) ) {
+            if ( ( ++contador ) > 1 )
+               break;
+            candidata.columna = j;
+         }
+      }
+      if ( contador == 1 ) { // Si solo hemos encontrado una casilla donde puede ir faltan[i]candidato
+         CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
+         return true;
       }
    }
-   if ( contador == 1 ) {
-      CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
-      return true;
-   }
-
    return false;
 }
+
+bool
+Trinidad::estudiaColumna( int const columna ) {
+   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   casilla candidata; candidata.columna = columna;
+   int contador;
+
+   
+      for ( int i = 0; i < 9; i++ ) {
+         actualizaLista( faltan, m_ps->m_tablero[i][columna].con );
+      }
+      for ( int candidato : faltan ) {
+         contador = 0;
+         for ( int j = 0; j < 9; j++ ) {
+            if ( !EMPTY( m_ps->m_tablero[j][columna] ) )
+               continue;
+            if ( POSIBLE_EN( candidato, j, columna ) ) {
+               if ( ( ++contador ) > 1 )
+                  break;
+               candidata.fila = j;
+            }
+         }
+         if ( contador == 1 ) { // Si solo hemos encontrado una casilla donde puede ir faltan[i]
+            CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
+            return true;
+         }
+      }
+   return false;
+}
+
+
 
 bool
 Trinidad::descarte() {
@@ -211,113 +212,70 @@ Trinidad::descarte() {
    // Necesitamos que se haya rellenado m_posibles.
 
    int nSuma;
+   int candidato;
 
-   for ( CuadIndex k( m_nCuadrante ); k < 9; ++k ) {
-
-      if (!EMPTY( m_ps->m_tablero[k.Fila()][k.Columna()] ) )
-         continue;
-
-      nSuma = 0;
-      for ( int i = 0; i < m_posibles.size(); i++ ) {
-         // Contamos cuántos números pueden ir en cada casilla.
-         if ( !(m_posibles[i] & ( 1 << k.Index()) ) )
+   for ( int fila = 0; fila < 9; fila++ ) {
+      for ( int columna = 0; columna < 9; columna++ ) {
+         if ( !EMPTY( m_ps->m_tablero[fila][columna] ) )
             continue;
-         if( (++nSuma) > 1)
-            break;
-         // Me espero que m_posibles y m_faltan tengan exactamente la misma cantidad de elementos.
-         candidato = m_faltan[i];
-      }
 
-      if ( nSuma == 1 ) {
-         // Si sólo hay un número que pueda ir en alguna casilla, la rellenamos
-         m_ps->CONTENT(k.Fila(), k.Columna()) = candidato;
-         nPuesto = DESCARTE;
-         return true;
+         nSuma = 0;
+         for ( int i = 1; i <= 9; i++ ) {
+            // Contamos cuántos números pueden ir en cada casilla.
+            if ( !POSIBLE_EN(i, fila, columna) )
+               continue;
+            candidato = i;
+            if ( ( ++nSuma ) > 1 )
+               break;
+         }
+
+         if ( nSuma == 1 ) {
+            // Si sólo hay un número que pueda ir en alguna casilla, la rellenamos
+            m_ps->CONTENT( fila, columna ) = candidato;
+            nPuesto = DESCARTE;
+            return true;
+         }
       }
    }
    return false;
 }
 
+#define SORT_POSIBILIDADES(a,b,c)   {if( POSIBILIDADES( *a ) > POSIBILIDADES( *b ) ) \
+                                       SWAP( a, b ); \
+                                    if ( POSIBILIDADES( *b ) > POSIBILIDADES( *c ) ) \
+                                       SWAP( b, c ); \
+                                    if ( POSIBILIDADES( *a ) > POSIBILIDADES( *b ) ) \
+                                       SWAP( a, b ); }
+
 void
-Trinidad::normalizar( int vt1, int vt2, int *vtCurr ) {
-   switch ( vt1 ) {
-      // Si el vector vt1 tiene una única coordenada no nula,
-      // puedo anular esa coordenada en el otro.
-      case 1:
-      case 2:
-      case 4:
-         // Aplico un xor y me quedo con los 3 primeros bits
-         vt2 = (vt2 & ~vt1) & (8 - 1);
-      default:
-         break;
-   }
-   switch ( vt2 ) {
-      // Si el vector vt1 tiene una única coordenada no nula,
-      // puedo anular esa coordenada en el otro.
-      case 1:
-      case 2:
-      case 4:
-         // Aplico un xor y me quedo con los 3 primeros bits
-         vt1 = (vt1 & ~vt2) & ( 8 - 1 );
-      default:
-         break;
-   }
+Trinidad::normalizar( int *vt1, int *vt2, int *vt3 ) {
+   // Buscamos
+   int *nMin = vt1;
+   int *nMed = vt2;
+   int *nMax = vt3;
 
-   if (vt2 < vt1)
-      SWAP(vt2, vt1);
+   SORT_POSIBILIDADES(nMin, nMed, nMax);
 
-   switch ( vt1 ) { // Fuerzo el razonamiento.
-      //Nos gustaría ser capaces de escribirlo de forma algorítmica
-      case 1:
-         switch ( vt2 ) {
-            case 2:
-               *vtCurr = 4; return;
-            case 4:
-               *vtCurr = 2; return;
-            case 6:
-               *vtCurr = 6; return;
-            default:
-               *vtCurr = 7; return;
-         }
-      case 2:
-         switch ( vt2 ) {
-            case 4:
-               *vtCurr = 1; return;
-            case 5:
-               *vtCurr = 5; return;
-            default:
-               *vtCurr = 7; return;
-         }
-      case 3:
-         switch ( vt2 ) {
-            case 3:
-               *vtCurr = 4; return;
-            case 4:
-               *vtCurr = 3; return;
-            case 5:
-            case 6:
-            case 7:
-            default:
-               *vtCurr = 7; return;
-         }
-      case 5:
-         switch ( vt2 ) {
-            case 5:
-               *vtCurr = 2; return;
-            case 6:
-            case 7:
-            default:
-               *vtCurr = 7; return;
-         }
-      case 6:
-         switch ( vt2 ) {
-            case 6:
-               *vtCurr = 1; return;
-            case 7:
-            default:
-               *vtCurr = 7; return;
-         }
-      default:
-         *vtCurr = 7; return;
+   if ( FILA_DETERMINADA( *nMin ) ) {
+      // Ponemos a 0 la coordenada que nos indica nMin
+      *nMed = *nMed & ~*nMin;
+      *nMax = *nMax & ~*nMin;
+      if ( FILA_DETERMINADA( *nMed ) ) {
+         // Ponemos a 0 la coordenada que nos indica nMed
+         *nMax = *nMax & ~*nMed;
+      }
+      // Quizás ahora nMax sea de tipo 1
+      SORT_POSIBILIDADES( nMin, nMed, nMax );
+      // nMin no nos puede dar información nueva
+      if ( FILA_DETERMINADA( *nMed ) ) {
+         // Ponemos a 0 la coordenada que nos indica nMed
+         *nMax = *nMax & ~*nMed;
+      }
+   }
+   else if ( DOS_POSIBILIDADES( *nMin ) ) {
+      if ( *nMin == *nMed )
+         *nMax = *nMax & (~*nMin & 0b111 );
+      if ( *nMin == *nMax )
+         *nMed = *nMed & (~*nMed & 0b111 );
    }
 }

@@ -7,29 +7,43 @@
 #define DESCARTE     2
 // Macro para asignar valores a MetaFila y MetaColumna
 #define SET_VECTOR(vt, val1, val2)  {vt[0] = val1; vt[1] = val2;}
+// Obtener de un código completo sus subcódigos
+#define GET_FILA_CODE(n, code)      {n = (code & 7);} // Nos quedamos con los tres primeros bits
+#define GET_COLUMN_CODE(n, code)    {n = (code >> 3);} // Nos quedamos con el resto de bits. Sólo 3 de ellos pueden ser 1
+#define SET_FILA_CODE(n, code)      {code = ( (code & (7 << 3)) | n);}
+#define SET_COLUMN_CODE(n, code)    {code = ( (code & 7) | (n << 3) );}
+// Comprobar bits
+#define FILA_DETERMINADA(n)         bool( n == 1 || n == 2 || n == 4 )
+#define CUALQUIER_FILA(n)           bool( n == 7)
+#define DOS_POSIBILIDADES(n)        bool( n == 3 || n == 5 || n == 6 )
+// Contar bits. No consideramos n = 0 un caso posible.
+#define POSIBILIDADES(n)            int(FILA_DETERMINADA(n) ? 1 : (CUALQUIER_FILA(n) ? 3 : 2))
+
 
 class Trinidad {
    Sudoku *m_ps;
-   int   m_nCuadrante;
-   int   m_nMetaFila[2];
-   int   m_nMetaColumna[2];
-   std::vector<int> m_faltan = { 1,2,3,4,5,6,7,8,9 };
-   // Guardo en qué casillas del cuadrante puede ir cada uno de los números que faltan
-   std::vector<int> m_posibles;
-   int   candidato;
    bool  m_bValidOri;
+   // En m_posibles[i][j] tenemos un número del 0 al 63.
+   // Indice en qué posiciones del cuadrante j-ésimo puede ir el
+   // número i
+   short int   m_posibles[9][9]{0};
    public:
    int nPuesto = NO_PUESTO;
 
    public:
-   Trinidad(Sudoku *ps, int nCuadrante);
+   Trinidad(Sudoku *ps);
    ~Trinidad();
    bool ponUnNumero();
 
    private:
-   bool estudiaCuadrante();
+   void normalizarCodigos();
+   void codigoCuadrante(int cuadrante, int candidato);
+   bool estudiaTablero();
+   bool estudiaCuadrante(int const c);
+   bool estudiaFila( int const c );
+   bool estudiaColumna( int const c );
    bool poner(int candidato);
    bool descarte();
-   void normalizar(int vt1, int vt2, int *vtCurr);
+   void normalizar(int *vt1, int *vt2, int *vt3);
 };
 
