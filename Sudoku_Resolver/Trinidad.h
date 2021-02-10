@@ -3,8 +3,10 @@
 
 // Valores para la variable nPuesto
 #define NO_PUESTO    0
-#define ESTUDIO      1
-#define DESCARTE     2
+#define ESTUDIO_F    10
+#define ESTUDIO_CO   20
+#define ESTUDIO_CU   30
+#define DESCARTE     40
 // Macro para asignar valores a MetaFila y MetaColumna
 #define SET_VECTOR(vt, val1, val2)  {vt[0] = val1; vt[1] = val2;}
 // Obtener de un código completo sus subcódigos
@@ -26,9 +28,10 @@ class Trinidad {
    // En m_posibles[i][j] tenemos un número del 0 al 63.
    // Indice en qué posiciones del cuadrante j-ésimo puede ir el
    // número i
-   short int   m_posibles[9][9]{0};
+   short int   m_posibles[9][9]{0};   
    public:
    int nPuesto = NO_PUESTO;
+   casilla   m_Candidata;
 
    public:
    Trinidad(Sudoku *ps);

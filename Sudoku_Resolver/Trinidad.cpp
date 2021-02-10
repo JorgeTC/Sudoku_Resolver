@@ -115,7 +115,6 @@ Trinidad::estudiaTablero() {
 bool
 Trinidad::estudiaCuadrante( int const cuadrante ) {
    std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
-   casilla candidata;
    int contador;
 
 
@@ -131,12 +130,13 @@ Trinidad::estudiaCuadrante( int const cuadrante ) {
          if ( POSIBLE_EN( candidato, k.Fila(), k.Columna() ) ) {
             if ( ( ++contador ) > 1 )
                break;
-            candidata.fila = k.Fila();
-            candidata.columna = k.Columna();
+            m_Candidata.fila = k.Fila();
+            m_Candidata.columna = k.Columna();
          }
       }
       if ( contador == 1 ) { // Si solo hemos encontrado una casilla donde puede ir candidato
-         CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
+         CONTENT_IN( m_ps->m_tablero, m_Candidata ) = candidato;
+         nPuesto = ESTUDIO_CU + cuadrante;
          return true;
       }
    }
@@ -147,7 +147,7 @@ Trinidad::estudiaCuadrante( int const cuadrante ) {
 bool
 Trinidad::estudiaFila( int const fila ) {
    std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
-   casilla candidata; candidata.fila = fila;
+   m_Candidata.fila = fila;
    int contador;
 
 
@@ -164,11 +164,12 @@ Trinidad::estudiaFila( int const fila ) {
          if( POSIBLE_EN( candidato, fila, j ) ) {
             if ( ( ++contador ) > 1 )
                break;
-            candidata.columna = j;
+            m_Candidata.columna = j;
          }
       }
       if ( contador == 1 ) { // Si solo hemos encontrado una casilla donde puede ir faltan[i]candidato
-         CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
+         CONTENT_IN( m_ps->m_tablero, m_Candidata ) = candidato;
+         nPuesto = ESTUDIO_F + fila;
          return true;
       }
    }
@@ -178,7 +179,7 @@ Trinidad::estudiaFila( int const fila ) {
 bool
 Trinidad::estudiaColumna( int const columna ) {
    std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
-   casilla candidata; candidata.columna = columna;
+   m_Candidata.columna = columna;
    int contador;
 
    
@@ -193,11 +194,12 @@ Trinidad::estudiaColumna( int const columna ) {
             if ( POSIBLE_EN( candidato, j, columna ) ) {
                if ( ( ++contador ) > 1 )
                   break;
-               candidata.fila = j;
+               m_Candidata.fila = j;
             }
          }
          if ( contador == 1 ) { // Si solo hemos encontrado una casilla donde puede ir faltan[i]
-            CONTENT_IN( m_ps->m_tablero, candidata ) = candidato;
+            CONTENT_IN( m_ps->m_tablero, m_Candidata ) = candidato;
+            nPuesto = ESTUDIO_CO + columna;
             return true;
          }
       }
@@ -232,6 +234,7 @@ Trinidad::descarte() {
          if ( nSuma == 1 ) {
             // Si sólo hay un número que pueda ir en alguna casilla, la rellenamos
             m_ps->CONTENT( fila, columna ) = candidato;
+            m_Candidata.fila = fila; m_Candidata.columna = columna;
             nPuesto = DESCARTE;
             return true;
          }

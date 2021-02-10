@@ -260,12 +260,26 @@ void
 Interfaz::Comentar( COMENT_CODE nMessage, Trinidad tr ) {
    if ( !m_ps->GetSSComent() )
       return;
-   switch ( tr.nPuesto ) {
+   switch ((tr.nPuesto/10) * 10) {
       case DESCARTE:
-         cout << "\nTrinidad ha puesto por descarte.";
+         cout << "\nTrinidad ha puesto por descarte. ";
+         cout << "En la fila " << tr.m_Candidata.fila << " columna " << tr.m_Candidata.columna << " sólo puede ir el "
+            << CONTENT_IN(m_tablero, tr.m_Candidata);
          break;
-      case ESTUDIO:
-         cout << "\nTrinidad ha puesto por estudio.";
+      case ESTUDIO_CU:
+         cout << "\nTrinidad ha puesto por estudio del cuadrante " << tr.nPuesto % 10 << ". ";
+         cout << "El número " << CONTENT_IN( m_tablero, tr.m_Candidata ) << " sólo puede ir en la fila " << tr.m_Candidata.fila <<
+            " columna " << tr.m_Candidata.columna;
+         break;
+      case ESTUDIO_CO:
+         cout << "\nTrinidad ha puesto por estudio de la columna " << tr.nPuesto % 10 << ". ";
+         cout << "El número " << CONTENT_IN( m_tablero, tr.m_Candidata ) << " sólo puede ir en la fila " << tr.m_Candidata.fila <<
+            " columna " << tr.m_Candidata.columna;
+         break;
+      case ESTUDIO_F:
+         cout << "\nTrinidad ha puesto por estudio de la fila " << tr.nPuesto % 10 << ". ";
+         cout << "El número " << CONTENT_IN( m_tablero, tr.m_Candidata ) << " sólo puede ir en la fila " << tr.m_Candidata.fila <<
+            " columna " << tr.m_Candidata.columna;
          break;
       default:
          return;
