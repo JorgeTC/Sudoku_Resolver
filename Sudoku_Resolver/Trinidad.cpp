@@ -114,7 +114,7 @@ Trinidad::estudiaTablero() {
 
 bool
 Trinidad::estudiaCuadrante( int const cuadrante ) {
-   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   std::vector<int> faltan = ALL_THE_NUMBERS;
    int contador;
 
 
@@ -146,7 +146,7 @@ Trinidad::estudiaCuadrante( int const cuadrante ) {
 
 bool
 Trinidad::estudiaFila( int const fila ) {
-   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   std::vector<int> faltan = ALL_THE_NUMBERS;
    m_Candidata.fila = fila;
    int contador;
 
@@ -178,7 +178,7 @@ Trinidad::estudiaFila( int const fila ) {
 
 bool
 Trinidad::estudiaColumna( int const columna ) {
-   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   std::vector<int> faltan = ALL_THE_NUMBERS;
    m_Candidata.columna = columna;
    int contador;
 

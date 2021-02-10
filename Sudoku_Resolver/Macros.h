@@ -25,6 +25,7 @@
 #define IMPOSSIBLE                     3
 
 #define MISSING_NUMBER(n)              (45-n)
+#define ALL_THE_NUMBERS                { 1,2,3,4,5,6,7,8,9 }
 
 #define FIRST_LINE_CUADRANT(cd)        (int) (floor(cd / 3) * 3)
 #define FIRST_COLUMN_CUADRANT(cd)      (int) (floor(cd % 3) * 3)

@@ -154,7 +154,7 @@ Sudoku::print() {
 
 bool
 Sudoku::estudiaCuadrante(int const cuadrante) {
-   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   std::vector<int> faltan = ALL_THE_NUMBERS;
    casilla candidata;
    bool puesto = true;
    int n;
@@ -189,7 +189,7 @@ Sudoku::estudiaCuadrante(int const cuadrante) {
 
 bool
 Sudoku::estudiaFila(int const fila) {
-   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   std::vector<int> faltan = ALL_THE_NUMBERS;
    std::vector<int>::iterator index;
    casilla candidata;
    bool puesto = true;
@@ -223,7 +223,7 @@ Sudoku::estudiaFila(int const fila) {
 
 bool
 Sudoku::estudiaColumna(int const columna) {
-   std::vector<int> faltan = { 1,2,3,4,5,6,7,8,9 };
+   std::vector<int> faltan = ALL_THE_NUMBERS;
    casilla candidata;
    bool puesto = true;
    int n;
