@@ -10,14 +10,14 @@
 // Macro para asignar valores a MetaFila y MetaColumna
 #define SET_VECTOR(vt, val1, val2)  {vt[0] = val1; vt[1] = val2;}
 // Obtener de un código completo sus subcódigos
-#define GET_FILA_CODE(n, code)      {n = (code & 7);} // Nos quedamos con los tres primeros bits
+#define GET_FILA_CODE(n, code)      {n = (code & 0b111);} // Nos quedamos con los tres primeros bits
 #define GET_COLUMN_CODE(n, code)    {n = (code >> 3);} // Nos quedamos con el resto de bits. Sólo 3 de ellos pueden ser 1
-#define SET_FILA_CODE(n, code)      {code = ( (code & (7 << 3)) | n);}
-#define SET_COLUMN_CODE(n, code)    {code = ( (code & 7) | (n << 3) );}
+#define SET_FILA_CODE(n, code)      {code = ( (code & (0b111000)) | n);}
+#define SET_COLUMN_CODE(n, code)    {code = ( (code & 0b111) | (n << 3) );}
 // Comprobar bits
-#define FILA_DETERMINADA(n)         bool( n == 1 || n == 2 || n == 4 )
-#define CUALQUIER_FILA(n)           bool( n == 7)
-#define DOS_POSIBILIDADES(n)        bool( n == 3 || n == 5 || n == 6 )
+#define FILA_DETERMINADA(n)         bool( n == 0b001 || n == 0b010 || n == 0b100 )  // 1, 2, 4
+#define CUALQUIER_FILA(n)           bool( n == 0b111)                               // 7
+#define DOS_POSIBILIDADES(n)        bool( n == 0b011 || n == 0b101 || n == 0b110 )  // 3, 5, 6
 // Contar bits. No consideramos n = 0 un caso posible.
 #define POSIBILIDADES(n)            int(FILA_DETERMINADA(n) ? 1 : (CUALQUIER_FILA(n) ? 3 : 2))
 

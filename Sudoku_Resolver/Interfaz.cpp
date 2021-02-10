@@ -230,7 +230,7 @@ Interfaz::Comentar( COMENT_CODE nMessage, sup Suposicion) {
          else if (i < Suposicion.candidatos.size() - 2)
             std::cout << ", ";
       }
-      std::cout << "\nSupongo que va un " << ToChar(Suposicion.candidatos[0]) << ".";
+      std::cout << ".\nSupongo que va un " << ToChar(Suposicion.candidatos[0]) << ".";
       break;
    case COMENT_CODE::DESCARTA_SUP:
       std::cout << "En la fila " << Suposicion.atacar.fila << ", columna " << Suposicion.atacar.columna << " solo pueden ir ";
@@ -250,7 +250,7 @@ Interfaz::Comentar( COMENT_CODE nMessage, sup Suposicion) {
             std::cout << ", ";
       }
       if (Suposicion.indice < Suposicion.candidatos.size())
-         std::cout << "\nSupongo que va un " << ToChar(Suposicion.candidatos[Suposicion.indice]) << ".";
+         std::cout << ".\nSupongo que va un " << ToChar(Suposicion.candidatos[Suposicion.indice]) << ".";
       break;
    }
    print();
@@ -262,22 +262,22 @@ Interfaz::Comentar( COMENT_CODE nMessage, Trinidad tr ) {
       return;
    switch ((tr.nPuesto/10) * 10) {
       case DESCARTE:
-         cout << "\nTrinidad ha puesto por descarte. ";
+         cout << "Trinidad ha puesto por descarte. \n";
          cout << "En la fila " << tr.m_Candidata.fila << " columna " << tr.m_Candidata.columna << " sólo puede ir el "
             << CONTENT_IN(m_tablero, tr.m_Candidata);
          break;
       case ESTUDIO_CU:
-         cout << "\nTrinidad ha puesto por estudio del cuadrante " << tr.nPuesto % 10 << ". ";
+         cout << "Trinidad ha puesto por estudio del cuadrante " << tr.nPuesto % 10 << ". \n";
          cout << "El número " << CONTENT_IN( m_tablero, tr.m_Candidata ) << " sólo puede ir en la fila " << tr.m_Candidata.fila <<
             " columna " << tr.m_Candidata.columna;
          break;
       case ESTUDIO_CO:
-         cout << "\nTrinidad ha puesto por estudio de la columna " << tr.nPuesto % 10 << ". ";
+         cout << "Trinidad ha puesto por estudio de la columna " << tr.nPuesto % 10 << ". \n";
          cout << "El número " << CONTENT_IN( m_tablero, tr.m_Candidata ) << " sólo puede ir en la fila " << tr.m_Candidata.fila <<
             " columna " << tr.m_Candidata.columna;
          break;
       case ESTUDIO_F:
-         cout << "\nTrinidad ha puesto por estudio de la fila " << tr.nPuesto % 10 << ". ";
+         cout << "Trinidad ha puesto por estudio de la fila " << tr.nPuesto % 10 << ". \n";
          cout << "El número " << CONTENT_IN( m_tablero, tr.m_Candidata ) << " sólo puede ir en la fila " << tr.m_Candidata.fila <<
             " columna " << tr.m_Candidata.columna;
          break;
