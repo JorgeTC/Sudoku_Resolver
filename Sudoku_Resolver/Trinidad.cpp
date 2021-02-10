@@ -210,8 +210,6 @@ Trinidad::estudiaColumna( int const columna ) {
 
 bool
 Trinidad::descarte() {
-   // Antes de ser llamada necesita haber sido llamada estudiaTablero.
-   // Necesitamos que se haya rellenado m_posibles.
 
    int nSuma;
    int candidato;
