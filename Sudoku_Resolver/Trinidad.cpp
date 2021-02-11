@@ -277,6 +277,10 @@ Trinidad::normalizar( int *vt1, int *vt2, int *vt3 ) {
       if ( *nMin == *nMed )
          *nMax = *nMax & (~*nMin & 0b111 );
       if ( *nMin == *nMax )
-         *nMed = *nMed & (~*nMed & 0b111 );
+         *nMed = *nMed & (~*nMin & 0b111 );
+   }
+   if ( DOS_POSIBILIDADES( *nMed ) ) {
+      if (*nMed == *nMax )
+         *nMin = *nMin & (~*nMed & 0b111 );
    }
 }
