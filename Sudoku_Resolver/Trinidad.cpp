@@ -250,11 +250,14 @@ Trinidad::descarte() {
 
 void
 Trinidad::normalizar( int *vt1, int *vt2, int *vt3 ) {
-   // Buscamos
+
    int *nMin = vt1;
    int *nMed = vt2;
    int *nMax = vt3;
 
+   // Nos aseguramos de que estén ordenadas.
+   // Queremos que el primer elemento de este trío
+   // sea el que menos alternativas tiene.
    SORT_POSIBILIDADES(nMin, nMed, nMax);
 
    if ( FILA_DETERMINADA( *nMin ) ) {
@@ -274,8 +277,12 @@ Trinidad::normalizar( int *vt1, int *vt2, int *vt3 ) {
       }
    }
    else if ( DOS_POSIBILIDADES( *nMin ) ) {
+      // Si hay dos números de dos posibilidades e iguales,
+      // determinan unívocamente cuál será el tercero.
       if ( *nMin == *nMed )
          *nMax = *nMax & (~*nMin & 0b111 );
+      // Al hacer la negación ~nos aparecen muchos 1s que no queremos.
+      // Los eliminaremos con & 0b111.
       if ( *nMin == *nMax )
          *nMed = *nMed & (~*nMin & 0b111 );
    }
