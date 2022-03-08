@@ -1,8 +1,0 @@
-﻿  Suponer.cpp
-C:\Users\usuario\Documents\Visual Studio 2015\Projects\Sudoku_Resolver\Sudoku_Resolver\Casilla.h(33,41): warning C4244: 'return': conversión de 'double' a 'int'; posible pérdida de datos
-  Generando código
-  1 of 371 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
-  Generación de código finalizada
-  Sudoku_Resolver.vcxproj -> C:\Users\usuario\Documents\Visual Studio 2015\Projects\Sudoku_Resolver\Release\Sudoku_Resolver.exe
